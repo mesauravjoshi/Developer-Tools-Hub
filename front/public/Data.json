@@ -1,0 +1,134 @@
+{
+  "fullname": "Arvind Kumar",
+  "role": "Full Stack & Mobile App Developer",
+  "profile_img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJQAAACUCAMAAABC4vDmAAABCFBMVEX////2u5EAFSMWFhb09PQAAADdqILvtY7QAADFAADMAADTAADAAACutLf9wJX8+/u1AAAAAAsAABOmAACwAAC9vb3+9/Llrof2uIwAECAQEBAICAj3xaLNzc3s7OzU1NTg4OD3wJmXl5fitpdjY2McHBwkJCRGRkZYWFiBgYEACg/Rn3yuhWlwV0a+knL33cz86+D4zK4AABnw4uKMjIw0NDSnp6dxcXFMPTOFZ1GhfGFeSTo4LCUtJSCTcVpDNCvau6f41b8tO0NDTlYnMDocICoUJDJXXWRjanAOFx/bmpTsvbrryMjPXV3EGBjVh4fUdHW0LS2wHR2/WlrAQD7ZoqK3Q0PFc3MOpAV6AAAIL...",
+  "summary": "With 15 years of experience as a web developer, I specialize in creating dynamic, high-performing websites and mobile applications. My expertise spans across a wide array of technologies, including PHP, JavaScript, Node.js, React Native, and Next.js. I am passionate about building user-friendly, scalable solutions that meet the unique needs of each project.",
+  "contact_number": "+91-98768-31310",
+  "linked": "www.abc.com",
+  "address": {
+    "street": "F539 Mohali Tower",
+    "city": "Mohali",
+    "country": "India"
+  },
+  "experience": [
+    {
+      "jobTitle": "Full Stack & Mobile Apps",
+      "companyName": "ABC Technolgies",
+      "fromDate": "2012",
+      "toDate": "Present",
+      "description": "ABC Technologies is an established company dealing in Digital Services including Software, Web and Mobile Application development since 2012. Doing Full Stack in MERN, VueJs & Next.js. Mobile Apps in ReactNative & Flutter."
+    },
+    {
+      "jobTitle": "Freelancer",
+      "companyName": "XYZ Tech",
+      "fromDate": "2009",
+      "toDate": "2012",
+      "description": "Worked as a full time freelancer from 2009 to 2012, delivering multiple successful projects for US and Austrian client which eventual led to start a full time office."
+    },
+    {
+      "jobTitle": "Senior Web Developer",
+      "companyName": "ABC Enterprises",
+      "fromDate": "2007",
+      "toDate": "2009",
+      "description": "ABC Enterprises is a leading name in the field of Software and Application development, established since 2001. I started my actual application developer career in this company."
+    }
+  ],
+  "interests": "Beyond my professional life, I have a deep interest in gaming, cricket, reading, and exploring the wonders of astrology and astronomy. I enjoy delving into the latest advancements in science, which often inspires my approach to technology and problem-solving in my work.Currently, I focus on web and mobile app development, using my skills to craft seamless digital experiences.",
+  "skills": [
+    {
+      "skillName": "Full Stack(MERN)",
+      "level": "95%"
+    },
+    {
+      "skillName": "Mobile Apps",
+      "level": "90%"
+    },
+    {
+      "skillName": "Rest API",
+      "level": "80%"
+    },
+    {
+      "skillName": "DevOps",
+      "level": "70%"
+    },
+    {
+      "skillName": "Project Management",
+      "level": "92%"
+    }
+  ],
+  "education": [
+    {
+      "title": "Masters, Post Graduate",
+      "institute": "LP University, Punjab",
+      "fromYear": "2012",
+      "toYear": "2014",
+      "grade": "A"
+    },
+    {
+      "title": "Bachelor, Graduate",
+      "institute": "HP University, Shimla",
+      "fromYear": "1999",
+      "toYear": "2001",
+      "grade": "B+"
+    },
+    {
+      "title": "Inter",
+      "institute": "HPSEB Dharmashala",
+      "fromYear": "1996",
+      "toYear": "1999",
+      "grade": "B+"
+    }
+  ],
+  "reference": [
+    {
+      "client": "Shannon Williams",
+      "position": "Founder and CEO",
+      "address": "TheControList, Carlsbad, California, USA",
+      "phone": "+1-512-797-1756",
+      "website": "www.thecontrolist.com"
+    },
+    {
+      "client": "Matt Ascough",
+      "position": "Founder and CEO",
+      "address": "Wilston, Brisbane, Queensland 4051, Australia",
+      "phone": "+61 7 3059 9411",
+      "website": "www.m2media.com.au"
+    },
+    {
+      "client": "James Moore",
+      "position": "CEO IT @Incetnco",
+      "address": "3801 PGA Blvd, Ste 600, Palm Beach Gardens FL 33410",
+      "phone": "+1-407-724-7256",
+      "website": "www.incentco.com"
+    }
+  ],
+  "portfolio": [
+    {
+      "_id": "1",
+      "projectName": "Example Project",
+      "description": "Lorem inventore dolor sit amet consectetur adipisicing elit. Expedita ut ipsum odio, excepturi fugiat eius porro eius!",
+      "imageUrl": "https://images.pexels.com/photos/7310202/pexels-photo-7310202.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "technologies": ["JavaScript", "React", "Next JS", "mongodb"],
+      "startDate": "Sep 2024",
+      "endDate": "Apr 2025"
+    },
+    {
+      "_id": "2",
+      "projectName": "CV Maker",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita ut ipsum odio, excepturi fugiat eius porro inventore!",
+      "imageUrl": "https://images.pexels.com/photos/39284/macbook-apple-imac-computer-39284.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "technologies": ["Angular", "HTML", "CSS3", "mongodb"],
+      "startDate": "Oct 2024",
+      "endDate": "May 2025"
+    },
+    {
+      "_id": "3",
+      "projectName": "Example Project",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita ut ipsum odio, excepturi fugiat eius porro inventore!",
+      "imageUrl": "https://images.pexels.com/photos/190364/pexels-photo-190364.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "technologies": ["Swift", "React", "Next JS", "Jira"],
+      "startDate": "Sep 2024",
+      "endDate": "Apr 2025"
+    }
+  ]
+}
