@@ -15,16 +15,19 @@ export default function Post() {
   }
 
   const handleSendReq = (e) => {
-    const fetchAPI = async () => {
+    const postest = async () => {
+      const data = {
+        name : 'saurav'
+      }
+      console.log(data);
       try {
-        const getRequest = await axios.get(`${api}`);
-        const toString = JSON.stringify(getRequest.data);
-        setDisplayGetData(toString);
+        const getRequest = await axios.post(`http://localhost:4000/data`, data);
+        console.log(getRequest);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
-    fetchAPI();
+    postest();
   }
 
   return (
