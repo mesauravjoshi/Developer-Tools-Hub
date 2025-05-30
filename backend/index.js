@@ -5,18 +5,16 @@ require('dotenv').config();
 const app = express();
 
 const PORT = 4000;
-app.use(cors()); // Enable CORS
+app.use(cors()); 
+app.use(express.json());
 
-app.post('/data',(req,res) => {
-    // const {name} = req.body;
-    // console.log(name);
-    
-    console.log('testing data ..........');
-    
-    res.status(200).json({message:'success'});
-    // if(name){
-    // }
-}) 
+app.post('/data', (req, res) => {
+    console.log('Request Body:', req.body);
+    // console.log('Request Headers:', req.headers);
+
+    res.status(200).json({ message: 'success' });
+});
+
 
 app.listen(PORT,() => {
     console.log(`server is running in : ${PORT}`);

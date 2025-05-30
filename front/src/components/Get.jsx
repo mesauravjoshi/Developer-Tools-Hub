@@ -66,7 +66,8 @@ export default function Example() {
 
               <h2 className='text-gray-300'>Content type: content-type</h2>
 
-              <div className="mt-7">
+              <div className="text-gray-300 mt-7">
+                Response
                 <textarea
                   disabled={true}
                   id="comment"
