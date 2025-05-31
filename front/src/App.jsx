@@ -2,7 +2,8 @@ import './App.css'
 import Home from './components/Home';
 import SignUp from './components/Auth/SignUp';
 import Get from './components/Get';
-import Post from './components/Post';
+import Post from './components/Post/Post';
+import Put from './components/Put';
 import './index.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/get" element={<Get />} />
           <Route path="/post" element={<Post />} />
+          <Route path="/put" element={<Put />} />
         </Routes>
       </Router>
     </>
