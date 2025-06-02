@@ -22,11 +22,11 @@ export default function Request({
   setHeader,
   params,
   setParams,
-  api,
-  setApi,
-  setFullParams
+  fullUrl,
+  setFullUrl,
+  inputRef
 }) {
-  
+
   const [currentTab, setCurrentTab] = useState('Body');
 
   const renderTabContent = () => {
@@ -38,7 +38,10 @@ export default function Request({
       case 'Authentication':
         return <div>Authentication Widget Here</div>;
       case 'Params':
-        return <ParamsWidget params={params} setParams={setParams} api={api} setApi={setApi} setFullParams={setFullParams} />
+        return <ParamsWidget 
+        params={params} setParams={setParams} setFullUrl={setFullUrl} fullUrl={fullUrl}
+        inputRef={inputRef}
+         />
       default:
         return null;
     }

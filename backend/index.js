@@ -28,5 +28,5 @@ app.put('/data', (req, res) => {
 });
 
 app.listen(PORT,() => {
-    console.log(`server is running in : ${PORT}`);
+    console.log(`server is running in : http://localhost:${PORT}`);
 }) 

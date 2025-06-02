@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { NavBar } from '../NavBar/Nav'
 import Slider from '../Slider'
@@ -20,14 +20,21 @@ export default function Post() {
   // const [params, setParams] = useState([
   //   ['', ''],
   // ]);
-  const [fullParams, setFullParams] = useState('')
 
   // chatgpt
   const [baseUrl, setBaseUrl] = useState('');
   const [params, setParams] = useState([{ id: Date.now(), key: '', value: '', enabled: true }]);
   const [fullUrl, setFullUrl] = useState('');
+  const inputRef = useRef(null);
+  const [cursorInfo, setCursorInfo] = useState('');
+
+  // const [firstPart, setFirstPart] = useState('');
+  // const [secondPart, setSecondPart] = useState('');
+
   // Update full URL whenever baseUrl or params change
+
   useEffect(() => {
+    // console.log('calling useEffect ');
     const validParams = params
       .filter(param => param.enabled && param.key.trim() !== '')
       .map(param =>
@@ -35,44 +42,78 @@ export default function Post() {
       );
 
     const queryString = validParams.length ? `?${validParams.join('&')}` : '';
-    setFullUrl(baseUrl + queryString);
+    // setFullUrl(baseUrl + queryString);
   }, [baseUrl, params]);
 
   const handleBaseUrlChange = (e) => {
-    setBaseUrl(e.target.value);
+    const url = e.target.value;
+    console.log(url);
+    const indexOf_Q = url.indexOf('?')
+    console.log(indexOf_Q);
+
+    if (indexOf_Q > 0) {
+      const input = inputRef.current;
+      const cursorIndex = input.selectionStart;
+      console.log(`Cursor is at index: ${cursorIndex}\n`);
+      console.log(`? is at index: ${indexOf_Q}\n`);
+
+      const parts = url.split('?');
+      const urlArray = [parts[0], '?' + parts[1]];
+
+      const firstPart = urlArray.length > 0 && urlArray[0];
+      const secondPart = urlArray.length > 0 && urlArray[1];
+
+      if (cursorIndex > indexOf_Q) {
+        // console.log('you are in param ');
+        const queryString = secondPart ? secondPart : ''
+        setFullUrl(firstPart + queryString)
+      }
+      if (cursorIndex < indexOf_Q) {
+        // console.log('you are in url ')
+        const URLString = firstPart ? firstPart : ''
+        setFullUrl(URLString + secondPart)
+      }
+      if (cursorIndex === indexOf_Q) {
+        console.log(`Cursor is at ? position: ${cursorIndex}\n`);
+        setFullUrl(firstPart + secondPart)
+      }
+
+    } else {
+      setFullUrl(e.target.value);
+    }
+
   };
 
-  const handleParamChange = (index, field, value) => {
-    const updatedParams = [...params];
-    updatedParams[index] = { ...updatedParams[index], [field]: value };
-    setParams(updatedParams);
-  };
+  const handleCursorPosition = (e) => {
+    // const url = e.target.value;
+    // const indexOf_Q = url.indexOf('?')
 
-  const addNewParam = () => {
-    setParams([
-      ...params,
-      { id: Date.now(), key: '', value: '', enabled: true }
-    ]);
-  };
+    // const input = inputRef.current;
+    // const cursorIndex = input.selectionStart;
+    // const text = input.value;
+    // console.log(`Cursor is at index: ${cursorIndex}\n`);
+    // let info = `Cursor is at index: ${cursorIndex}\n`;
+    // console.log(`? is at index: ${indexOf_Q}\n`);
 
-  const deleteParam = (id) => {
-    if (params.length <= 1) return;
-    setParams(params.filter(param => param.id !== id));
-  };
+    // if (cursorIndex > indexOf_Q) {
+    //   console.log('you are in param ');
+    // }
+    // if (cursorIndex < indexOf_Q) {
+    //   console.log('you are in url ')
+    // }
 
-  const toggleParam = (id) => {
-    setParams(params.map(param =>
-      param.id === id ? { ...param, enabled: !param.enabled } : param
-    ));
+    // if (cursorIndex > 0 && cursorIndex < text.length) {
+    //   info += `Between "${text[cursorIndex - 1]}" and "${text[cursorIndex]}"`;
+    // } else if (cursorIndex === 0) {
+    //   info += 'At the very beginning.';
+    // } else if (cursorIndex === text.length) {
+    //   info += 'At the very end.';
+    // }
+
+    // setCursorInfo(info);
   };
 
   // chatgpt
-
-
-  const handdleChange = (e) => {
-    const { name, value } = e.target;
-    setApi(value);
-  }
 
   const postTest = async () => {
     // const data = {
@@ -100,13 +141,13 @@ export default function Post() {
     }
   }
 
-  // const handleSendReq = (e) => {
-  //   setDisplayPostData(null)
-  //   const isValid = validateURL(api);
-  //   if (isValid) {
-  //     postTest();
-  //   } else setDisplayPostData('NO RECORD FOUND')
-  // }
+  const handleSendReq = (e) => {
+    setDisplayPostData(null)
+    const isValid = validateURL(api);
+    if (isValid) {
+      postTest();
+    } else setDisplayPostData('NO RECORD FOUND')
+  }
 
   return (
     <>
@@ -123,114 +164,45 @@ export default function Post() {
               <h1 className="text-gray-300 text-3xl font-bold">Post </h1>
               {/* API Input */}
 
-              <div className="max-w-4xl mx-auto p-6">
-                {/* API URL Input */}
+              <div className="max-w-4xl mx-auto py-4">
+
+                {/* <ApiInput fullUrl={fullUrl} handleBaseUrlChange={handleBaseUrlChange} 
+                handleSendReq={handleSendReq} /> */}
                 <div className="apiInput flex gap-2">
                   <div className="flex-grow">
                     <input
+                      ref={inputRef}
                       type="text"
-                      className="block w-full rounded-md bg-white/5 px-3 py-2.5 text-base text-white 
-                      outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 
-                      focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                      className="block w-full rounded-md bg-white/5 px-3 py-2.5 text-base text-white  outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500  focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                       value={fullUrl}
                       onChange={handleBaseUrlChange}
+                      onKeyUp={handleCursorPosition}
                       placeholder="https://api.example.com/resource"
                     />
                   </div>
                   <button
-                    className="rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white 
-                     shadow-xs hover:bg-indigo-500 whitespace-nowrap"
+                    className="rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 whitespace-nowrap"
                     onClick={handleSendReq}
                   >
                     Send
                   </button>
                 </div>
+                <p className=' text-gray-300 ' onClick={() => setFullUrl('')}> X</p>
+                <pre className='text-white'>{cursorInfo}</pre>
 
-                {/* Parameters Section */}
-                <div className="mt-8">
-                  <h3 className="text-lg font-medium text-white mb-3">Query Parameters</h3>
+                <Request
+                  body={body}
+                  setBody={setBody}
+                  header={header}
+                  setHeader={setHeader}
+                  params={params}
+                  setParams={setParams}
+                  fullUrl={fullUrl}
+                  setFullUrl={setFullUrl}
+                  inputRef={inputRef}
+                />
 
-                  <div className="grid grid-cols-12 gap-2 items-center mb-2">
-                    <div className="col-span-1 flex justify-center">
-                      <span className="text-sm font-medium text-white">Enabled</span>
-                    </div>
-                    <div className="col-span-4">
-                      <span className="text-sm font-medium text-white">Key</span>
-                    </div>
-                    <div className="col-span-6">
-                      <span className="text-sm font-medium text-white">Value</span>
-                    </div>
-                    <div className="col-span-1"></div>
-                  </div>
-
-                  {params.map((param, index) => (
-                    <div key={param.id} className="grid grid-cols-12 gap-2 items-center mb-2">
-                      <div className="col-span-1 flex justify-center">
-                        <input
-                          type="checkbox"
-                          checked={param.enabled}
-                          onChange={() => toggleParam(param.id)}
-                          className="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 
-                          focus:ring-indigo-600 focus:ring-offset-gray-900"
-                        />
-                      </div>
-
-                      <div className="col-span-4">
-                        <input
-                          type="text"
-                          value={param.key}
-                          onChange={(e) => handleParamChange(index, 'key', e.target.value)}
-                          className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-white 
-                          outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 
-                          focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
-                          placeholder="Key"
-                        />
-                      </div>
-
-                      <div className="col-span-6">
-                        <input
-                          type="text"
-                          value={param.value}
-                          onChange={(e) => handleParamChange(index, 'value', e.target.value)}
-                          className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-white 
-                          outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 
-                          focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
-                          placeholder="Value"
-                        />
-                      </div>
-
-                      <div className="col-span-1 flex justify-center">
-                        <button
-                          onClick={() => deleteParam(param.id)}
-                          disabled={params.length <= 1}
-                          className={`rounded-full p-1 ${params.length > 1
-                            ? 'text-red-400 hover:bg-white/10 hover:text-red-300'
-                            : 'text-gray-500 cursor-not-allowed'
-                            }`}
-                        >
-                          <XMarkIcon className="h-5 w-5" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-
-                  <button
-                    onClick={addNewParam}
-                    className="mt-3 flex items-center gap-1 rounded-md bg-white/10 px-3 py-1.5 
-                    text-sm font-medium text-white hover:bg-white/20"
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                    Add Parameter
-                  </button>
-                </div>
-
-                {/* Current URL Preview */}
-                <div className="mt-6 p-4 bg-gray-800/50 rounded-md">
-                  <p className="text-sm text-gray-400 mb-1">Current URL:</p>
-                  <p className="text-blue-300 font-mono break-all">{fullUrl || <span className="text-gray-500">No URL specified</span>}</p>
-                </div>
               </div>
-
 
               <Response displayPostData={displayPostData} />
 
