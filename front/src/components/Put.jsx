@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useRef  } from 'react'
 import axios from 'axios'
 import { NavBar } from './NavBar/Nav'
 import Slider from './Slider'
@@ -7,34 +7,29 @@ import ApiInput from './UI/ApiInput'
 import Request from './UI/Request/Request'
 import Response from './UI/Response';
 
-export default function Put() {
+export default function Example() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [api, setApi] = useState('');
-  const [displayPostData, setDisplayPostData] = useState(null);
+  const [displayGetData, setDisplayGetData] = useState(null);
+
   const [body, setBody] = useState('');
   const [header, setHeader] = useState([
     ['Content-Type', 'application/json'],
     ['', ''],
   ]);
-  const [params, setParams] = useState([
-    ['', ''],
-  ]);
-  const [fullParams, setFullParams] = useState('');
 
-  const handdleChange = (e) => {
-    const { name, value } = e.target;
-    setApi(value);
-  }
+  // chatgpt
+  const [params, setParams] = useState([{ id: Date.now(), key: '', value: '', enabled: true }]);
+  const [fullUrl, setFullUrl] = useState('');
+  const inputRef = useRef(null);
 
-  const postTest = async () => {
-    const headers = header;
+  const fetchAPI = async () => {
     try {
-      console.log(api);
-      const postRequest = await axios.put(`${api}`, body, { headers });
-      console.log(postRequest);
-      if (typeof postRequest.data === 'object') {
-        const toString = JSON.stringify(postRequest.data);
-        setDisplayPostData(toString);
+      const getRequest = await axios.put(`${fullUrl}`);
+      console.log('Data:', getRequest);
+      console.log('Data type:', typeof getRequest.data === 'string');
+      if (typeof getRequest.data === 'object') {
+        const toString = JSON.stringify(getRequest.data);
+        setDisplayGetData(toString);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -42,11 +37,11 @@ export default function Put() {
   }
 
   const handleSendReq = (e) => {
-    setDisplayPostData(null)
-    const isValid = validateURL(api);
-    if (isValid) {
-      postTest();
-    } else setDisplayPostData('NO RECORD FOUND')
+    setDisplayGetData(null)
+    // console.log(typeof fullUrl);
+    const isValid = validateURL(fullUrl);
+    if (isValid) fetchAPI();
+    else setDisplayGetData('NO RECORD FOUND')
   }
 
   return (
@@ -61,23 +56,28 @@ export default function Put() {
           <main className="py-4">
             <div className="px-4 sm:px-6 lg:px-8">
 
-              <h1 className="text-gray-300 text-3xl font-bold">Put </h1>
+              <h1 className="text-gray-300 text-3xl font-bold">Get </h1>
+              {/* API Input */}
 
-              <ApiInput api={api} handdleChange={handdleChange} handleSendReq={handleSendReq} />
+              <div className="max-w-4xl mx-auto py-4">
 
-              <Request
-                body={body}
-                setBody={setBody}
-                header={header}
-                setHeader={setHeader}
-                params={params}
-                setParams={setParams}
-                api={api}
-                setApi={setApi}
-                setFullParams={setFullParams}
-              />
+                <ApiInput fullUrl={fullUrl} setFullUrl={setFullUrl} handleSendReq={handleSendReq} inputRef={inputRef} />
 
-              <Response displayPostData={displayPostData}/>
+                <Request
+                  body={body}
+                  setBody={setBody}
+                  header={header}
+                  setHeader={setHeader}
+                  params={params}
+                  setParams={setParams}
+                  fullUrl={fullUrl}
+                  setFullUrl={setFullUrl}
+                  inputRef={inputRef}
+                />
+
+              </div>
+
+              <Response displayPostData={displayGetData} />
 
             </div>
           </main>

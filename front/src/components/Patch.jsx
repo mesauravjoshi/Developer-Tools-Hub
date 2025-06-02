@@ -7,7 +7,7 @@ import ApiInput from './UI/ApiInput'
 import Request from './UI/Request/Request'
 import Response from './UI/Response';
 
-export default function Example() {
+export default function Patch() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [displayGetData, setDisplayGetData] = useState(null);
 
@@ -23,9 +23,9 @@ export default function Example() {
   const inputRef = useRef(null);
 
   const fetchAPI = async () => {
-    const headers = header;
     try {
-      const getRequest = await axios.get(`${fullUrl}`, body, { headers });
+      const headers = header;
+      const getRequest = await axios.patch(`${fullUrl}`, body, { headers });
       console.log('Data:', getRequest);
       console.log('Data type:', typeof getRequest.data === 'string');
       if (typeof getRequest.data === 'object') {
@@ -57,7 +57,7 @@ export default function Example() {
           <main className="py-4">
             <div className="px-4 sm:px-6 lg:px-8">
 
-              <h1 className="text-gray-300 text-3xl font-bold">Get </h1>
+              <h1 className="text-gray-300 text-3xl font-bold">Patch </h1>
               {/* API Input */}
 
               <div className="max-w-4xl mx-auto py-4">

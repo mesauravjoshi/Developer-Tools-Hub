@@ -1,6 +1,7 @@
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { QueryString } from '../../Utils/QueryString';
 
-const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl}) => {
+const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl }) => {
 
   const handleParamChange = (index, field, value) => {
     const updatedParams = [...params];
@@ -9,15 +10,17 @@ const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl}) => {
 
     const indexOf_Q = fullUrl.indexOf('?')
 
+    // const validParams = updatedParams
+    //   .filter(param => param.enabled && param.key.trim() !== '')
+    //   .map(param =>
+    //     `${encodeURIComponent(param.key.length > 0 ? param.key : 'a')}=${encodeURIComponent(param.value)}`
+    //   );
+    // const queryString = validParams.length ? `?${validParams.join('&')}` : '';
+    const queryString = QueryString(updatedParams);
+
     if (indexOf_Q === -1) {
       // console.log('not found ? mark');
 
-      const validParams = updatedParams
-        .filter(param => param.enabled && param.key.trim() !== '')
-        .map(param =>
-          `${encodeURIComponent(param.key.length > 0 ? param.key : 'a')}=${encodeURIComponent(param.value)}`
-        );
-      const queryString = validParams.length ? `?${validParams.join('&')}` : '';
       setFullUrl(fullUrl + queryString);
     } else {
 
@@ -27,14 +30,6 @@ const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl}) => {
       const urlArray = [parts[0], '?' + parts[1]];
 
       const firstPart = urlArray.length > 0 && urlArray[0];
-      const secondPart = urlArray.length > 0 && urlArray[1];
-
-      const validParams = updatedParams
-        .filter(param => param.enabled && param.key.trim() !== '')
-        .map(param =>
-          `${encodeURIComponent(param.key.length > 0 ? param.key : 'a')}=${encodeURIComponent(param.value)}`
-        );
-      const queryString = validParams.length ? `?${validParams.join('&')}` : '';
 
       setFullUrl(firstPart + queryString)
     }
@@ -59,7 +54,7 @@ const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl}) => {
   };
 
   return (
-    <div className="mt-8">
+    <div className="mt-4">
       {/* <h3 className="text-lg font-medium text-white mb-3">Query Parameters</h3> */}
 
       <div className="grid grid-cols-12 gap-2 items-center mb-2">
@@ -72,7 +67,7 @@ const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl}) => {
         <div className="col-span-6">
           <span className="text-sm font-medium text-white">Value</span>
         </div>
-        <div className="col-span-1"></div>
+        <div className="col-span-1 text-white " onClick={addNewParam}>+ Add</div>
       </div>
 
       {params.map((param, index) => (
@@ -121,13 +116,13 @@ const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl}) => {
         </div>
       ))}
 
-      <button
+      {/* <button
         onClick={addNewParam}
         className="mt-3 flex items-center gap-1 rounded-md bg-white/10 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/20"
       >
         <PlusIcon className="h-4 w-4" />
         Add Parameter
-      </button>
+      </button> */}
     </div>
   )
 }
