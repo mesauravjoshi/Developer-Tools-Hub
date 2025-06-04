@@ -10,7 +10,9 @@ import Response from './UI/Response';
 export default function Example() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [displayGetData, setDisplayGetData] = useState(null);
-
+  const [loading, setLoading] = useState(false);
+  console.log(loading);
+  
   const [body, setBody] = useState('');
   const [header, setHeader] = useState([
     ['Content-Type', 'application/json'],
@@ -25,12 +27,14 @@ export default function Example() {
   const fetchAPI = async () => {
     const headers = header;
     try {
+      setLoading(true)
       const getRequest = await axios.get(`${fullUrl}`, body, { headers });
       console.log('Data:', getRequest);
       console.log('Data type:', typeof getRequest.data === 'string');
       if (typeof getRequest.data === 'object') {
-        const toString = JSON.stringify(getRequest.data);
+        const toString = JSON.stringify((getRequest.data), null, 2);
         setDisplayGetData(toString);
+        setLoading(false)
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -78,7 +82,7 @@ export default function Example() {
 
               </div>
 
-              <Response displayPostData={displayGetData} />
+              <Response displayPostData={displayGetData} loading={loading}/>
 
             </div>
           </main>
