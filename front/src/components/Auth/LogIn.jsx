@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function SignIp() {
+export default function LogIn() {
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -16,6 +16,10 @@ export default function SignIp() {
     })
   }
 
+  const handleSubmit = () => {
+
+  }
+  
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -25,7 +29,6 @@ export default function SignIp() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm/6 font-medium text-white">
                 Email address
@@ -88,14 +91,13 @@ export default function SignIp() {
             </div>
 
             <div>
-              <button
+              <button onClick={handleSubmit}
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
                 Sign in
               </button>
             </div>
-          </form>
 
           <p className="mt-10 text-center text-sm/6 text-gray-400">
             Already created ?{' '}

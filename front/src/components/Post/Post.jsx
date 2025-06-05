@@ -16,7 +16,6 @@ export default function Post() {
     ['', ''],
   ]);
 
-  // chatgpt
   const [params, setParams] = useState([{ id: Date.now(), key: '', value: '', enabled: true }]);
   const [fullUrl, setFullUrl] = useState('');
   const inputRef = useRef(null);
@@ -61,8 +60,6 @@ export default function Post() {
 
     // setCursorInfo(info);
   };
-
-  // chatgpt
 
   const postTest = async () => {
 

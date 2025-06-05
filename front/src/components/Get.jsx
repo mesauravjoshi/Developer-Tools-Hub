@@ -11,7 +11,6 @@ export default function Example() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [displayGetData, setDisplayGetData] = useState(null);
   const [loading, setLoading] = useState(false);
-  console.log(loading);
   
   const [body, setBody] = useState('');
   const [header, setHeader] = useState([
@@ -19,7 +18,6 @@ export default function Example() {
     ['', ''],
   ]);
 
-  // chatgpt
   const [params, setParams] = useState([{ id: Date.now(), key: '', value: '', enabled: true }]);
   const [fullUrl, setFullUrl] = useState('');
   const inputRef = useRef(null);
@@ -43,7 +41,6 @@ export default function Example() {
 
   const handleSendReq = (e) => {
     setDisplayGetData(null)
-    // console.log(typeof fullUrl);
     const isValid = validateURL(fullUrl);
     if (isValid) fetchAPI();
     else setDisplayGetData('NO RECORD FOUND')

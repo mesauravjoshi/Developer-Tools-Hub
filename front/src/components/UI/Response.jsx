@@ -3,7 +3,6 @@ import { useState } from 'react';
 export default function Response({ displayPostData, loading }) {
   const [copied, setCopied] = useState(false);
   // const loading = true
-  console.log(loading);
 
   const handleCopy = () => {
     if (!displayPostData) return;
