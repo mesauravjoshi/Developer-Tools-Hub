@@ -1,33 +1,56 @@
+import {useEffect} from 'react'
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  TransitionChild,
+    Dialog,
+    DialogBackdrop,
+    DialogPanel,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    TransitionChild,
 } from '@headlessui/react'
 import {
-  Bars3Icon,
-  BellIcon,
-  Cog6ToothIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
-  XMarkIcon,
+    Bars3Icon,
+    BellIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useDispatch } from 'react-redux';
-// import { toggleSidebar } from '../Store/Slice/';
+import axios from 'axios';
+import { useState } from 'react';
 
 const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
+    { name: 'Your profile', href: '#' },
+    { name: 'Sign out', href: '#' },
 ]
 
-export const NavBar = ({sidebarOpen, setSidebarOpen}) => {
+export const NavBar = ({ sidebarOpen, setSidebarOpen }) => {
     const dispatch = useDispatch();
+    const [gravatarUrl, setGravatarUrl] = useState('');
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        const generateGravatar = async (email) => {
+            if (true) {
+                // const email = session.user.email.trim().toLowerCase();
+                try {
+                    const response = await axios.get(`https://api.hashify.net/hash/md5/hex?value=${email}`);
+                    const hash = response.data?.Digest
+                    if (hash) {
+                        console.log(`https://www.gravatar.com/avatar/${hash}?d=identicon`);
+                        setGravatarUrl(`https://www.gravatar.com/avatar/${hash}?d=identicon`);
+                    }
+                } catch (error) {
+                    console.error('Failed to fetch MD5 hash for Gravatar:', error);
+                }
+            }
+        };
+        const getUserData = localStorage.getItem('user_data');
+        const userData = JSON.parse(getUserData);
+        setUsername(userData?.username)
+        if (userData.email) {
+            generateGravatar(userData.email);
+        }
+    }, []);
 
     return (
         <div className="sticky top-0 z-40 flex h-12 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8">
@@ -68,12 +91,12 @@ export const NavBar = ({sidebarOpen, setSidebarOpen}) => {
                             <span className="sr-only">Open user menu</span>
                             <img
                                 alt=""
-                                src="https://images.unsplash.com/"
+                                src={`${gravatarUrl}`}
                                 className="size-8 rounded-full bg-gray-50"
                             />
                             <span className="hidden lg:flex lg:items-center">
                                 <span aria-hidden="true" className="ml-4 text-sm/6 font-semibold text-gray-900">
-                                    Admin
+                                    {username}
                                 </span>
                                 <ChevronDownIcon aria-hidden="true" className="ml-2 size-5 text-gray-400" />
                             </span>

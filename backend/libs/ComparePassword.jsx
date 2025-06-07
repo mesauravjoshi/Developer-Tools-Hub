@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios'
-const url = ' http://localhost:3000';
 
-export default function SignIp() {
+export default function LogIn() {
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -14,25 +12,14 @@ export default function SignIp() {
     const { value, name } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+       [name]: value
     })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = () => {
 
-    const signIn = async () => {
-      console.log(formData);
-      try {
-        const response = await axios.post(`${url}/signup`,formData);
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    signIn();
   }
-
+  
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -42,7 +29,6 @@ export default function SignIp() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm/6 font-medium text-white">
                 Email address
@@ -105,19 +91,18 @@ export default function SignIp() {
             </div>
 
             <div>
-              <button
+              <button onClick={handleSubmit}
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
                 Sign in
               </button>
             </div>
-          </form>
 
           <p className="mt-10 text-center text-sm/6 text-gray-400">
             Already created ?{' '}
             <Link to={'/login'} className="font-semibold text-indigo-400 hover:text-indigo-300">
-              Log In
+              Log In 
             </Link>
           </p>
         </div>

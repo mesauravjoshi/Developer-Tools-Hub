@@ -65,8 +65,8 @@ export default function Post() {
 
     const headers = header;
     try {
-      console.log(fullUrl);
-      const postRequest = await axios.post(`${fullUrl}`, body, { headers });
+      console.log(JSON.parse(body));
+      const postRequest = await axios.post(`${fullUrl}`, JSON.parse(body), { headers });
       console.log(postRequest);
       if (typeof postRequest.data === 'object') {
         const toString = JSON.stringify(postRequest.data);
