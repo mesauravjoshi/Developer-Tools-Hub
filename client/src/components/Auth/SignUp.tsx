@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 const url = ' http://localhost:3000';
 
-export default function SignIp() {
+export default function SignUp() {
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -11,7 +11,7 @@ export default function SignIp() {
   });
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setFormData({
       ...formData,
@@ -19,7 +19,7 @@ export default function SignIp() {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const signIn = async () => {

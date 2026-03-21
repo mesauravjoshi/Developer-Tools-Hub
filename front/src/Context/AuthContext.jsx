@@ -8,13 +8,18 @@ export const AuthProvider = ({ children }) => {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    console.log('calling...........');
+    // console.log('calling...........');
     const getUserData = localStorage.getItem('user_data');
     const userData = JSON.parse(getUserData);
-    setUsername(userData.username);
-    setUserId(userData._id);
-    setEmail(userData.email);
-  }, [])
+    // console.log(getUserData);
+    // console.log(userData);
+    if (userData) {
+      console.log('user data found in local storage:', userData);
+      setUsername(userData.username);
+      setUserId(userData._id);
+      setEmail(userData.email);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ username, userId, email }}>
