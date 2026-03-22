@@ -1,14 +1,11 @@
-import { useState,useRef  } from 'react'
+import { useState, useRef } from 'react'
 import axios from 'axios'
-import { NavBar } from './NavBar/Nav'
-import Slider from './Slider'
-import { validateURL } from './Utils/ValidateURL';
+import { validateURL } from '../Utils/ValidateURL';
 import ApiInput from './UI/ApiInput'
 import Request from './UI/Request/Request'
 import Response from './UI/Response';
 
 export default function Example() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [displayGetData, setDisplayGetData] = useState(null);
 
   const [body, setBody] = useState('');
@@ -45,44 +42,31 @@ export default function Example() {
   }
 
   return (
-    <>
-      <div>
-        {/* Slider code */}
-        <Slider sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} r />
+    <div className="px-4 sm:px-6 lg:px-8">
 
-        <div className="lg:pl-72">
-          <NavBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <h1 className="text-gray-300 text-3xl font-bold">Get </h1>
+      {/* API Input */}
 
-          <main className="py-4">
-            <div className="px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto py-4">
 
-              <h1 className="text-gray-300 text-3xl font-bold">Get </h1>
-              {/* API Input */}
+        <ApiInput fullUrl={fullUrl} setFullUrl={setFullUrl} handleSendReq={handleSendReq} inputRef={inputRef} />
 
-              <div className="max-w-4xl mx-auto py-4">
+        <Request
+          body={body}
+          setBody={setBody}
+          header={header}
+          setHeader={setHeader}
+          params={params}
+          setParams={setParams}
+          fullUrl={fullUrl}
+          setFullUrl={setFullUrl}
+          inputRef={inputRef}
+        />
 
-                <ApiInput fullUrl={fullUrl} setFullUrl={setFullUrl} handleSendReq={handleSendReq} inputRef={inputRef} />
-
-                <Request
-                  body={body}
-                  setBody={setBody}
-                  header={header}
-                  setHeader={setHeader}
-                  params={params}
-                  setParams={setParams}
-                  fullUrl={fullUrl}
-                  setFullUrl={setFullUrl}
-                  inputRef={inputRef}
-                />
-
-              </div>
-
-              <Response displayPostData={displayGetData} />
-
-            </div>
-          </main>
-        </div>
       </div>
-    </>
+
+      <Response displayPostData={displayGetData} />
+
+    </div>
   )
 }

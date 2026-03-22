@@ -1,9 +1,30 @@
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { QueryString } from '../../Utils/QueryString';
+import { QueryString } from '../../../Utils/QueryString';
 
-const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl }) => {
+interface ParamItem {
+  id: number;
+  key: string;
+  value: string;
+  enabled: boolean;
+}
 
-  const handleParamChange = (index, field, value) => {
+interface ParamsWidgetProps {
+  params: ParamItem[];
+  setParams: (params: ParamItem[]) => void;
+  fullUrl: string;
+  setFullUrl: (url: string) => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}
+
+const ParamsWidget: React.FC<ParamsWidgetProps> = ({
+  params,
+  setParams,
+  fullUrl,
+  setFullUrl,
+  inputRef
+}) => {
+
+  const handleParamChange = (index: number, field: string, value: string) => {
     const updatedParams = [...params];
     updatedParams[index] = { ...updatedParams[index], [field]: value };
     setParams(updatedParams);
@@ -42,12 +63,12 @@ const ParamsWidget = ({ params, setParams, setFullUrl, fullUrl }) => {
     ]);
   };
 
-  const deleteParam = (id) => {
+  const deleteParam = (id: number) => {
     if (params.length <= 1) return;
     setParams(params.filter(param => param.id !== id));
   };
 
-  const toggleParam = (id) => {
+  const toggleParam = (id: number) => {
     setParams(params.map(param =>
       param.id === id ? { ...param, enabled: !param.enabled } : param
     ));

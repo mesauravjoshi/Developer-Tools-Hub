@@ -1,14 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import { NavBar } from '../NavBar/Nav'
-import Slider from '../Slider'
-import { validateURL } from '../Utils/ValidateURL';
+import { validateURL } from '../../Utils/ValidateURL';
 import ApiInput from '../UI/ApiInput'
 import Request from '../UI/Request/Request'
 import Response from '../UI/Response';
 
 export default function Post() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [displayPostData, setDisplayPostData] = useState(null);
   const [body, setBody] = useState('');
   const [header, setHeader] = useState([
@@ -85,60 +82,32 @@ export default function Post() {
     } else setDisplayPostData('NO RECORD FOUND')
   }
 
-  // --------------------- practise questions -------------------------------------
-
-  function adder(a){
-    function add(b) {
-      console.log(a+b);
-    }
-    return add;
-  }
-
-  const addTO9 = adder(9);
-  addTO9(10);
-  addTO9(9);
-
-  // --------------------- practise questions -------------------------------------
-
   return (
-    <>
-      <div>
-        {/* Slider code */}
-        <Slider sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} r />
+    <div className="px-4 sm:px-6 lg:px-8">
 
-        <div className="lg:pl-72">
-          <NavBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <h1 className="text-gray-300 text-3xl font-bold">Post </h1>
+      {/* API Input */}
 
-          <main className="py-4">
-            <div className="px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto py-4">
 
-              <h1 className="text-gray-300 text-3xl font-bold">Post </h1>
-              {/* API Input */}
+        <ApiInput fullUrl={fullUrl} setFullUrl={setFullUrl} handleSendReq={handleSendReq} inputRef={inputRef} />
 
-              <div className="max-w-4xl mx-auto py-4">
+        <Request
+          body={body}
+          setBody={setBody}
+          header={header}
+          setHeader={setHeader}
+          params={params}
+          setParams={setParams}
+          fullUrl={fullUrl}
+          setFullUrl={setFullUrl}
+          inputRef={inputRef}
+        />
 
-                <ApiInput fullUrl={fullUrl} setFullUrl={setFullUrl} handleSendReq={handleSendReq} inputRef={inputRef} />
-               
-                <Request
-                  body={body}
-                  setBody={setBody}
-                  header={header}
-                  setHeader={setHeader}
-                  params={params}
-                  setParams={setParams}
-                  fullUrl={fullUrl}
-                  setFullUrl={setFullUrl}
-                  inputRef={inputRef}
-                />
-
-              </div>
-
-              <Response displayPostData={displayPostData} />
-
-            </div>
-          </main>
-        </div>
       </div>
-    </>
+
+      <Response displayPostData={displayPostData} />
+
+    </div>
   )
 }
