@@ -4,38 +4,49 @@ import { validateURL } from '@/Utils/ValidateURL';
 import ApiInput from '@/components/UI/ApiInput'
 import Request from '@/components/UI/Request/Request'
 import Response from '@/components/UI/Response';
+import { HeaderItem, ParamItem } from '@/types/types';
 
 export default function Index() {
   const [displayGetData, setDisplayGetData] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // const [body, setBody] = useState('');
   const [body, setBody] = useState('');
-  const [header, setHeader] = useState([
-    ['Content-Type', 'application/json'],
-    ['', ''],
+  const [header, setHeader] = useState<HeaderItem[]>([
+    { key: 'Content-Type', value: 'application/json', enabled: true },
+    { key: '', value: '', enabled: true },
   ]);
 
-  const [params, setParams] = useState([{ id: Date.now(), key: '', value: '', enabled: true }]);
+  const [params, setParams] = useState<ParamItem[]>([{ id: Date.now(), key: '', value: '', enabled: true }]);
   const [fullUrl, setFullUrl] = useState('');
   const inputRef = useRef(null);
 
   const fetchAPI = async () => {
-    const headers = header;
     try {
-      setLoading(true)
-      const getRequest = await axios.get(`${fullUrl}`, body, { headers });
+      setLoading(true);
+      const headers: Record<string, string> = {};
+      header.forEach(item => {
+        if (item.key && item.value && item.enabled !== false) {
+          headers[item.key] = item.value;
+        }
+      });
+
+      // const getRequest = await axios.post(`${fullUrl}`, { headers });
+      const getRequest = await axios.post(fullUrl, {}, { headers });
+
       console.log('Data:', getRequest);
       console.log('Data type:', typeof getRequest.data === 'string');
       if (typeof getRequest.data === 'object') {
         const toString = JSON.stringify((getRequest.data), null, 2);
         setDisplayGetData(toString);
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoading(false);
+      setDisplayGetData('Error fetching data');
     }
   }
-
 
   const handleSendReq = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -68,7 +79,7 @@ export default function Index() {
           setFullUrl={setFullUrl}
           inputRef={inputRef}
         />
-        
+
         <Response displayPostData={displayGetData} loading={loading} />
       </div>
 

@@ -1,84 +1,82 @@
-import { PlusIcon } from '@heroicons/react/20/solid'
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { HeaderItem } from '@/types/types';
 
+interface ParamsWidgetProps {
+  header: HeaderItem[];
+  setHeader: React.Dispatch<React.SetStateAction<HeaderItem[]>>;
+}
 
-const HeaderWidget = ({ header, setHeader }) => {
-  const handleChangeKey = (e, index) => {
-    const updatedKey = e.target.value;
-    const updatedHeader = [...header];
-    updatedHeader[index][0] = updatedKey;
-    setHeader(updatedHeader);
+const HeaderWidget: React.FC<ParamsWidgetProps> = ({
+  header, setHeader
+}) => {
+
+  const addHeaderRow = () => {
+    setHeader([...header, { key: '', value: '', enabled: true }]);
   };
 
-  const handleChangeValue = (e, index) => {
-    const updatedValue = e.target.value;
-    const updatedHeader = [...header];
-    updatedHeader[index][1] = updatedValue;
-    setHeader(updatedHeader);
+  const updateHeader = (index: number, field: 'key' | 'value', value: string) => {
+    const updated = [...header];
+    updated[index][field] = value;
+    setHeader(updated);
+  };
+
+  const removeHeaderRow = (index: number) => {
+    const updated = header.filter((_, i) => i !== index);
+    setHeader(updated);
   };
 
   return (
-    <>
-      <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
-        <div className="sm:col-span-3">
-          <label htmlFor="first-name" className="block text-sm/6 font-medium text-white">
-            Key
-          </label>
-        </div>
-
-        <div className="sm:col-span-3">
-          <label htmlFor="last-name" className="block text-sm/6 font-medium text-white">
-            Value
-          </label>
-        </div>
+    <div className="space-y-2">
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead>
+            <tr className="text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <th className="pb-2">Key</th>
+              <th className="pb-2">Value</th>
+              <th className="pb-2 w-10"></th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            {header.map((item, index) => (
+              <tr key={index}>
+                <td className="py-2 pr-2">
+                  <input
+                    type="text"
+                    className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-colors"
+                    value={item.key}
+                    onChange={(e) => updateHeader(index, 'key', e.target.value)}
+                    placeholder="Content-Type"
+                  />
+                </td>
+                <td className="py-2 pr-2">
+                  <input
+                    type="text"
+                    className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-colors"
+                    value={item.value}
+                    onChange={(e) => updateHeader(index, 'value', e.target.value)}
+                    placeholder="application/json"
+                  />
+                </td>
+                <td className="py-2">
+                  <button
+                    onClick={() => removeHeaderRow(index)}
+                    className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm"
+                  >
+                    <TrashIcon className="w-5 h-5 text-red-500" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
-      {
-        header.map(([key, value], index) => (
-          <div key={index} className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
-
-            <div className="sm:col-span-3">
-              <div className="mt-2">
-                <input
-                  id="first-name"
-                  name="first-name"
-                  type="text"
-                  value={key}
-                  onChange={(e) => handleChangeKey(e, index)}
-                  autoComplete="given-name"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <div className="mt-2">
-                <input
-                  id="last-name"
-                  name="last-name"
-                  type="text"
-                  value={value}
-                  onChange={(e) => handleChangeValue(e, index)}
-                  autoComplete="family-name"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
-          </div>
-        ))
-      }
       <button
-        onClick={() => {
-          setHeader([
-            ...header,
-            ['', '']
-          ])
-        }}
-        type="button"
-        className="rounded-full bg-indigo-600 p-1.5 text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        onClick={addHeaderRow}
+        className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
       >
-        <PlusIcon aria-hidden="true" className="size-5" />
+        + Add Header
       </button>
-    </>
+    </div>
   )
 }
 

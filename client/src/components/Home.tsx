@@ -82,7 +82,7 @@ const Hero: React.FC = () => {
               </button>
               </Link>
               <button className="px-6 py-3 rounded-lg font-semibold border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 shadow-sm">
-                View Docs
+                {`</>`}View Docs
               </button>
             </div>
           </div>

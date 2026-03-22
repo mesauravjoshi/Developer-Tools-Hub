@@ -57,7 +57,7 @@ export const NavBar = ({ sidebarOpen, setSidebarOpen }: NavBarProps) => {
       }
     };
     if (email) {
-      console.log('called');
+      // console.log('called');
       generateGravatar();
     }
   }, [email]);

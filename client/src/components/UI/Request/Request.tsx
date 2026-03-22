@@ -4,25 +4,13 @@ import { ChevronDownIcon } from '@heroicons/react/16/solid'
 import BodyWidget from './BodyWidget';
 import HeaderWidget from './HeaderWidget';
 import ParamsWidget from './ParamsWidget';
-
-interface HeaderItem {
-  key: string;
-  value: string;
-  enabled?: boolean;
-}
-
-interface ParamItem {
-  id: number;
-  key: string;
-  value: string;
-  enabled: boolean;
-}
+import { HeaderItem, ParamItem } from '@/types/types';
 
 interface RequestProps {
   body: string;
   setBody: (body: string) => void;
   header: HeaderItem[];
-  setHeader: (header: HeaderItem[]) => void;
+  setHeader: React.Dispatch<React.SetStateAction<HeaderItem[]>>;
   params: ParamItem[];
   setParams: (params: ParamItem[]) => void;
   fullUrl: string;
@@ -65,9 +53,9 @@ export default function Request({
         return <div className='text-gray-700 dark:text-gray-300'>Authentication Widget Here</div>;
       case 'Params':
         return <ParamsWidget
-          params={params} 
-          setParams={setParams} 
-          setFullUrl={setFullUrl} 
+          params={params}
+          setParams={setParams}
+          setFullUrl={setFullUrl}
           fullUrl={fullUrl}
           inputRef={inputRef}
         />
@@ -95,7 +83,7 @@ export default function Request({
         />
       </div>
 
-      <div className='rounded-lg mt-2 overflow-auto min-h-[182px] max-h-[182px]'>
+      <div className='rounded-lg mt-2 overflow-auto min-h-45.5 max-h-45.5'>
         <div className="hidden sm:block">
           <div className="border-b border-gray-200 dark:border-gray-700">
             <nav aria-label="Tabs" className="-mb-px flex space-x-8">

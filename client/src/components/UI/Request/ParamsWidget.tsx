@@ -1,12 +1,6 @@
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { QueryString } from '../../../Utils/QueryString';
-
-interface ParamItem {
-  id: number;
-  key: string;
-  value: string;
-  enabled: boolean;
-}
+import { ParamItem } from '@/types/types';
 
 interface ParamsWidgetProps {
   params: ParamItem[];
