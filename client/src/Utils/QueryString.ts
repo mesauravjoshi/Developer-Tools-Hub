@@ -1,4 +1,4 @@
-export const QueryString = (query) => {
+export const QueryString = (query: string) => {
 
     const validParams = query
         .filter(param => param.enabled && param.key.trim() !== '')

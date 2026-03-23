@@ -16,8 +16,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import axios from 'axios'
-import { NavBar } from '@/components/NavBar/Nav'
-import { useDispatch } from 'react-redux'
 // import { setIsSliderOpen } from '@/Store/Slice/SliderSlice'
 import { Link, useParams, useLocation } from 'react-router-dom'
 
@@ -34,11 +32,9 @@ interface SliderProps {
 }
 
 const navigation: NavigationItem[] = [
-  { name: 'Get', href: '/get', icon: HomeIcon, current: true },
-  { name: 'Post', href: '/post', icon: UsersIcon, current: false },
-  { name: 'Put', href: '/put', icon: FolderIcon, current: false },
-  { name: 'Patch', href: '/patch', icon: FolderIcon, current: false },
-  { name: 'Delete', href: '/delete', icon: FolderIcon, current: false }
+  { name: 'Request', href: '/request', icon: HomeIcon, current: true },
+  { name: 'History', href: '/history', icon: UsersIcon, current: false },
+  { name: 'Environments', href: '/environments', icon: FolderIcon, current: false }
 ]
 
 function classNames(...classes: (string | boolean | undefined)[]): string {
@@ -46,7 +42,7 @@ function classNames(...classes: (string | boolean | undefined)[]): string {
 }
 
 export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const location = useLocation()
   const pathName = location.pathname
 
@@ -65,9 +61,9 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
           >
             <TransitionChild>
               <div className="absolute top-0 left-full flex w-16 justify-center pt-5 duration-300 ease-in-out data-closed:opacity-0">
-                <button 
-                  type="button" 
-                  onClick={() => setSidebarOpen(false)} 
+                <button
+                  type="button"
+                  onClick={() => setSidebarOpen(false)}
                   className="-m-2.5 p-2.5"
                 >
                   <span className="sr-only">Close sidebar</span>
@@ -79,7 +75,7 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-4 ring-1 ring-gray-200 dark:ring-gray-800">
               <div className="flex h-16 shrink-0 items-center">
                 <div className="text-2xl font-extrabold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  AutoAPI
+                  AutoAPI d
                 </div>
               </div>
               <nav className="flex flex-1 flex-col">
@@ -98,14 +94,14 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                               'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold transition-colors duration-200'
                             )}
                           >
-                            <item.icon 
-                              aria-hidden="true" 
+                            <item.icon
+                              aria-hidden="true"
                               className={classNames(
                                 pathName === item.href
                                   ? 'text-blue-600 dark:text-white'
                                   : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200',
                                 'size-6 shrink-0'
-                              )} 
+                              )}
                             />
                             {item.name}
                           </Link>
@@ -121,9 +117,9 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                       href="#"
                       className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
                     >
-                      <Cog6ToothIcon 
-                        aria-hidden="true" 
-                        className="size-6 shrink-0 text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200" 
+                      <Cog6ToothIcon
+                        aria-hidden="true"
+                        className="size-6 shrink-0 text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200"
                       />
                       Settings
                     </a>
@@ -139,9 +135,11 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-4 border-r border-gray-200 dark:border-gray-800">
           <div className="flex h-16 shrink-0 items-center">
-            <div className="text-2xl font-extrabold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              AutoAPI
-            </div>
+            <Link to={`/`}>
+              <div className="text-2xl font-extrabold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                AutoAPI
+              </div>
+            </Link>
           </div>
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -158,14 +156,14 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                           'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold transition-colors duration-200'
                         )}
                       >
-                        <item.icon 
-                          aria-hidden="true" 
+                        <item.icon
+                          aria-hidden="true"
                           className={classNames(
                             pathName === item.href
                               ? 'text-blue-600 dark:text-white'
                               : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200',
                             'size-6 shrink-0'
-                          )} 
+                          )}
                         />
                         {item.name}
                       </Link>
@@ -181,9 +179,9 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                   href="#"
                   className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
                 >
-                  <Cog6ToothIcon 
-                    aria-hidden="true" 
-                    className="size-6 shrink-0 text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200" 
+                  <Cog6ToothIcon
+                    aria-hidden="true"
+                    className="size-6 shrink-0 text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200"
                   />
                   Settings
                 </a>

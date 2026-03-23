@@ -1,14 +1,29 @@
-// ApiInput.tsx
-import { useState, useEffect, RefObject } from "react"
+import { useState, RefObject } from "react"
+import { MethodsTypes } from '@/types/types';
 
 interface ApiInputProps {
   fullUrl: string;
   setFullUrl: (url: string) => void;
   handleSendReq: (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => void;
   inputRef: RefObject<HTMLInputElement | null>;
+  setMethod: React.Dispatch<React.SetStateAction<MethodsTypes>>;
 }
 
-export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef }: ApiInputProps) {
+const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
+
+function classNames(...classes: (string | boolean | undefined)[]): string {
+  return classes.filter(Boolean).join(' ')
+}
+
+export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef, setMethod }: ApiInputProps) {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("GET");
+
+  const handleSelect = (m: string) => {
+    setSelected(m);
+    setMethod(m.toLowerCase() as MethodsTypes);
+    setOpen(false);
+  };
 
   const handleBaseUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
@@ -17,7 +32,7 @@ export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef 
     if (indexOf_Q > 0) {
       const input = inputRef.current;
       const cursorIndex = input?.selectionStart || 0;
-      
+
       const parts = url.split('?');
       const urlArray = [parts[0], '?' + parts[1]];
 
@@ -41,12 +56,41 @@ export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef 
   };
 
   return (
-    <div className="apiInput flex gap-2">
-      <button
-        className="rounded-md bg-indigo-600 dark:bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 dark:hover:bg-indigo-400 whitespace-nowrap transition-colors"
-      >
-        GET
-      </button>
+    <div className="flex relative">
+
+      {/* ✅ Custom dropdown */}
+      <div className="relative">
+
+        {/* button */}
+        <div
+          onClick={() => setOpen(!open)}
+          className="cursor-pointer rounded-md border border-gray-500 dark:border-gray-600  px-4 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 h-full"
+        >
+          {selected}
+        </div>
+
+        {/* dropdown */}
+        {open && (
+          <div className="absolute top-11 left-0 w-28 rounded-md bg-white dark:bg-gray-800 shadow-lg border border-gray-300 dark:border-gray-700 z-50">
+            {methods.map((m) => (
+              <div
+                key={m}
+                onClick={() => handleSelect(m)}
+                className={classNames(`px-3 py-2 text-sm cursor-pointer hover:bg-indigo-500 hover:text-white
+                  ${selected === m
+                    ? "bg-indigo-600 text-white"
+                    : "text-gray-700 dark:text-gray-200"
+                  }
+                `)}
+              >
+                {m}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* input */}
       <div className="grow">
         <input
           ref={inputRef}
@@ -57,8 +101,9 @@ export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef 
           placeholder="https://api.example.com/resource"
         />
       </div>
+
       <button
-        className="rounded-md bg-indigo-600 dark:bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 dark:hover:bg-indigo-400 whitespace-nowrap transition-colors"
+        className="ml-1.5 rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white cursor-pointer"
         onClick={handleSendReq}
       >
         Send

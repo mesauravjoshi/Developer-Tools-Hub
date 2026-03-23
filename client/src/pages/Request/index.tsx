@@ -4,13 +4,12 @@ import { validateURL } from '@/Utils/ValidateURL';
 import ApiInput from '@/components/UI/ApiInput'
 import Request from '@/components/UI/Request/Request'
 import Response from '@/components/UI/Response';
-import { HeaderItem, ParamItem } from '@/types/types';
+import { HeaderItem, ParamItem, MethodsTypes } from '@/types/types';
 
 export default function Index() {
+  const [method, setMethod] = useState<MethodsTypes>('get');
   const [displayGetData, setDisplayGetData] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  // const [body, setBody] = useState('');
   const [body, setBody] = useState('');
   const [header, setHeader] = useState<HeaderItem[]>([
     { key: 'Content-Type', value: 'application/json', enabled: true },
@@ -31,16 +30,21 @@ export default function Index() {
         }
       });
 
-      // const getRequest = await axios.post(`${fullUrl}`, { headers });
-      const getRequest = await axios.post(fullUrl, {}, { headers });
+      let response;
 
-      console.log('Data:', getRequest);
-      console.log('Data type:', typeof getRequest.data === 'string');
-      if (typeof getRequest.data === 'object') {
-        const toString = JSON.stringify((getRequest.data), null, 2);
-        setDisplayGetData(toString);
-        setLoading(false);
+      if (method === "get" || method === "delete") {
+        response = await axios[method](fullUrl, { headers });
+      } else {
+        response = await axios[method](fullUrl, {}, { headers });
       }
+
+      console.log('Data:', response);
+      console.log('Data type:', typeof response.data === 'string');
+      if (typeof response.data === 'object') {
+        const toString = JSON.stringify((response.data), null, 2);
+        setDisplayGetData(toString);
+      }
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(false);
@@ -58,7 +62,7 @@ export default function Index() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300">
-      <h1 className="text-gray-900 dark:text-gray-100 text-3xl font-bold">Get</h1>
+      {/* <h1 className="text-gray-900 dark:text-gray-100 text-3xl font-bold">Get</h1> */}
 
       <div className="max-w-4xl mx-auto py-4">
         <ApiInput
@@ -66,6 +70,7 @@ export default function Index() {
           setFullUrl={setFullUrl}
           handleSendReq={handleSendReq}
           inputRef={inputRef}
+          setMethod={setMethod}
         />
 
         <Request

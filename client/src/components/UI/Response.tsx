@@ -1,6 +1,11 @@
 import { useState } from 'react';
 
-export default function Response({ displayPostData, loading }) {
+interface ResponseProps {
+  displayPostData: string | null;
+  loading: boolean
+}
+
+export default function Response({ displayPostData, loading }: ResponseProps) {
   const [copied, setCopied] = useState(false);
   // const loading = true
 
@@ -27,14 +32,14 @@ export default function Response({ displayPostData, loading }) {
           </div>
         )}
 
-        <pre className="bg-gray-800 text-green-300 p-4 min-h-[230px] max-h-[230px] text-sm overflow-auto">
+        <pre className="bg-gray-800 text-green-300 p-4 min-h-57.5 max-h-57.5 text-sm overflow-auto">
           {displayPostData}
         </pre>
 
         {/* Copy Button */}
         <div
           onClick={handleCopy}
-          className="absolute top-2 right-2 bg-white/10 text-white text-xs px-2 py-1 rounded cursor-pointer hover:bg-white/20 transition"
+          className="absolute top-2 right-2 bg-white/10 text-white text-xs px-2 py-1 rounded cursor-pointer hover:bg-white/20 transition mr-2"
         >
           {copied ? 'Copied!' : 'Copy'}
         </div>

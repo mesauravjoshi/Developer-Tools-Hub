@@ -72,14 +72,14 @@ const Hero: React.FC = () => {
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto lg:mx-0">
-              The modern Postman alternative for API development, testing, and collaboration. 
+              The modern Postman alternative for API development, testing, and collaboration.
               Streamline your workflow with lightning-fast requests and intuitive design.
             </p>
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
-              <Link to={'/get'}>
-              <button className="px-6 py-3 rounded-lg font-semibold bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                Get Started
-              </button>
+              <Link to={'/request'}>
+                <button className="px-6 py-3 rounded-lg font-semibold bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                  Get Started
+                </button>
               </Link>
               <button className="px-6 py-3 rounded-lg font-semibold border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 shadow-sm">
                 {`</>`}View Docs
@@ -148,7 +148,7 @@ const Hero: React.FC = () => {
                     <span className="text-xs px-2 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded-full">200 OK</span>
                   </div>
                   <pre className="bg-gray-50 dark:bg-gray-900/70 rounded-lg p-3 text-xs font-mono text-gray-700 dark:text-gray-300 overflow-x-auto">
-{`{
+                    {`{
   "status": "success",
   "data": {
     "id": 1,
