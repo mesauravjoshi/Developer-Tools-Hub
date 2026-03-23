@@ -30,7 +30,7 @@ export default function Index() {
         }
       });
 
-      let response;
+      let response: any;
 
       if (method === "get" || method === "delete") {
         response = await axios[method](fullUrl, { headers });
