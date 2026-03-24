@@ -108,6 +108,11 @@ export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef,
       >
         Send
       </button>
+      <button
+        className="ml-1.5 rounded-md bg-amber-600 px-1 py-2 text-sm font-semibold text-white cursor-pointer"
+      >
+        {`</>`}
+      </button>
     </div>
   )
 }

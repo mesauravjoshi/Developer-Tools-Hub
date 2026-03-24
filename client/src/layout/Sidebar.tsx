@@ -75,7 +75,7 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-4 ring-1 ring-gray-200 dark:ring-gray-800">
               <div className="flex h-16 shrink-0 items-center">
                 <div className="text-2xl font-extrabold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  AutoAPI d
+                  AutoAPI
                 </div>
               </div>
               <nav className="flex flex-1 flex-col">

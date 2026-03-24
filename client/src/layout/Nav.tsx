@@ -10,7 +10,6 @@ import {
   BellIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useState } from 'react';
 import { AuthContext } from '@/Context/AuthContext';
@@ -21,7 +20,7 @@ interface UserNavigationItem {
 }
 
 interface NavBarProps {
-  sidebarOpen: boolean;
+  // sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
 }
 
@@ -30,8 +29,7 @@ const userNavigation: UserNavigationItem[] = [
   { name: 'Sign out', href: '#' },
 ]
 
-export const NavBar = ({ sidebarOpen, setSidebarOpen }: NavBarProps) => {
-  const dispatch = useDispatch();
+export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
   const [gravatarUrl, setGravatarUrl] = useState('');
   const auth = useContext(AuthContext);
 
@@ -87,9 +85,9 @@ export const NavBar = ({ sidebarOpen, setSidebarOpen }: NavBarProps) => {
 
   return (
     <div className="sticky top-0 z-40 flex h-12 shrink-0 items-center gap-x-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8 transition-colors duration-300">
-      <button 
-        type="button" 
-        onClick={() => setSidebarOpen(true)} 
+      <button
+        type="button"
+        onClick={() => setSidebarOpen(true)}
         className="-m-2.5 p-2.5 text-gray-700 dark:text-gray-300 lg:hidden hover:text-gray-900 dark:hover:text-white transition-colors"
       >
         <span className="sr-only">Open sidebar</span>

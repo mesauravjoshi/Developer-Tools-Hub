@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-
 import Slider from "@/layout/Sidebar";
-import { NavBar } from "@/components/NavBar/Nav";
+import { NavBar } from "@/layout/Nav";
 
 export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,7 +15,7 @@ export default function MainLayout() {
 
       <div className="lg:pl-72">
         <NavBar
-          sidebarOpen={sidebarOpen}
+          // sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
         />
 

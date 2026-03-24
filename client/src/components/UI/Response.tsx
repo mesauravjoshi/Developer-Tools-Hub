@@ -1,17 +1,17 @@
 import { useState } from 'react';
 
 interface ResponseProps {
-  displayPostData: string | null;
+  displayResponse: string | null;
   loading: boolean
 }
 
-export default function Response({ displayPostData, loading }: ResponseProps) {
+export default function Response({ displayResponse, loading }: ResponseProps) {
   const [copied, setCopied] = useState(false);
   // const loading = true
 
   const handleCopy = () => {
-    if (!displayPostData) return;
-    navigator.clipboard.writeText(displayPostData)
+    if (!displayResponse) return;
+    navigator.clipboard.writeText(displayResponse)
       .then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 1500);
@@ -21,9 +21,38 @@ export default function Response({ displayPostData, loading }: ResponseProps) {
       });
   };
 
+  const handleDownload = (): void => {
+    if (!displayResponse) return;
+
+    const blob = new Blob([displayResponse], { type: 'text/plain' });
+
+    const url: string = URL.createObjectURL(blob);
+
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = 'response.json';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <>
-      <h2 className="text-white mb-2">Response</h2>
+      <div className="flex justify-between">
+        <h2 className="text-gray-800 dark:text-white mb-2 font-semibold">Response</h2>
+        {
+          displayResponse &&
+          <button
+            className="rounded-md bg-green-600 px-3 py-1 mb-2 font-semibold text-white cursor-pointer"
+            onClick={handleDownload}
+          >
+            Save
+          </button>
+        }
+      </div>
       <div className="relative border border-gray-700 rounded-lg overflow-hidden">
         {/* Loading Line */}
         {loading && (
@@ -33,7 +62,7 @@ export default function Response({ displayPostData, loading }: ResponseProps) {
         )}
 
         <pre className="bg-gray-800 text-green-300 p-4 min-h-57.5 max-h-57.5 text-sm overflow-auto">
-          {displayPostData}
+          {displayResponse}
         </pre>
 
         {/* Copy Button */}

@@ -6,9 +6,9 @@ import Request from '@/components/UI/Request/Request'
 import Response from '@/components/UI/Response';
 import { HeaderItem, ParamItem, MethodsTypes } from '@/types/types';
 
-export default function Index() {
+export default function RequestForm() {
   const [method, setMethod] = useState<MethodsTypes>('get');
-  const [displayGetData, setDisplayGetData] = useState<string | null>(null);
+  const [displayResponse, setDisplayResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [body, setBody] = useState('');
   const [header, setHeader] = useState<HeaderItem[]>([
@@ -30,7 +30,7 @@ export default function Index() {
         }
       });
 
-      let response: any;
+      let response;
 
       if (method === "get" || method === "delete") {
         response = await axios[method](fullUrl, { headers });
@@ -42,22 +42,22 @@ export default function Index() {
       console.log('Data type:', typeof response.data === 'string');
       if (typeof response.data === 'object') {
         const toString = JSON.stringify((response.data), null, 2);
-        setDisplayGetData(toString);
+        setDisplayResponse(toString);
       }
       setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(false);
-      setDisplayGetData('Error fetching data');
+      setDisplayResponse('Error fetching data');
     }
   }
 
   const handleSendReq = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setDisplayGetData(null);
+    setDisplayResponse(null);
     const isValid = validateURL(fullUrl);
     if (isValid) fetchAPI();
-    else setDisplayGetData('NO RECORD FOUND');
+    else setDisplayResponse('NO RECORD FOUND');
   }
 
   return (
@@ -85,7 +85,7 @@ export default function Index() {
           inputRef={inputRef}
         />
 
-        <Response displayPostData={displayGetData} loading={loading} />
+        <Response displayResponse={displayResponse} loading={loading} />
       </div>
 
     </div>
