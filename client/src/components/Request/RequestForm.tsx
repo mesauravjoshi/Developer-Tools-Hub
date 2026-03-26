@@ -1,10 +1,11 @@
-import { useState, useRef } from 'react'
-import axios from 'axios'
+import { useState, useRef } from 'react';
+import axios from 'axios';
 import { validateURL } from '@/Utils/ValidateURL';
-import ApiInput from '@/components/UI/ApiInput'
-import Request from '@/components/UI/Request/Request'
+import ApiInput from '@/components/UI/ApiInput';
+import Request from '@/components/UI/Request/Request';
 import Response from '@/components/UI/Response';
 import { HeaderItem, ParamItem, MethodsTypes } from '@/types/types';
+import SnippetSlide from '@/components/UI/SnippetSlide';
 
 export default function RequestForm() {
   const [method, setMethod] = useState<MethodsTypes>('get');
@@ -18,17 +19,24 @@ export default function RequestForm() {
 
   const [params, setParams] = useState<ParamItem[]>([{ id: Date.now(), key: '', value: '', enabled: true }]);
   const [fullUrl, setFullUrl] = useState('');
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [openRightSlider, setOpenRightSlider] = useState(false);
+  const [activeLang, setActiveLang] = useState<'curl' | 'fetch' | 'axios'>('curl');
+
+  const buildHeaders = () => {
+    const headers: Record<string, string> = {};
+    header.forEach(item => {
+      if (item.key && item.value && item.enabled !== false) {
+        headers[item.key] = item.value;
+      }
+    });
+    return headers;
+  };
 
   const fetchAPI = async () => {
     try {
       setLoading(true);
-      const headers: Record<string, string> = {};
-      header.forEach(item => {
-        if (item.key && item.value && item.enabled !== false) {
-          headers[item.key] = item.value;
-        }
-      });
+      const headers = buildHeaders();
 
       let response;
 
@@ -38,12 +46,11 @@ export default function RequestForm() {
         response = await axios[method](fullUrl, {}, { headers });
       }
 
-      console.log('Data:', response);
-      console.log('Data type:', typeof response.data === 'string');
       if (typeof response.data === 'object') {
         const toString = JSON.stringify((response.data), null, 2);
         setDisplayResponse(toString);
       }
+
       setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -61,8 +68,7 @@ export default function RequestForm() {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300">
-      {/* <h1 className="text-gray-900 dark:text-gray-100 text-3xl font-bold">Get</h1> */}
+    <div className="py-4 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300 relative overflow-hidden">
 
       <div className="max-w-4xl mx-auto py-4">
         <ApiInput
@@ -71,6 +77,7 @@ export default function RequestForm() {
           handleSendReq={handleSendReq}
           inputRef={inputRef}
           setMethod={setMethod}
+          setOpenRightSlider={setOpenRightSlider}
         />
 
         <Request
@@ -88,6 +95,16 @@ export default function RequestForm() {
         <Response displayResponse={displayResponse} loading={loading} />
       </div>
 
+      <SnippetSlide
+        open={openRightSlider}
+        onClose={() => setOpenRightSlider(false)}
+        activeLang={activeLang}
+        setActiveLang={setActiveLang}
+        method={method}
+        fullUrl={fullUrl}
+        headers={buildHeaders()}
+        body={body}
+      />
     </div>
   )
 }

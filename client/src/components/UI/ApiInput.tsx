@@ -7,6 +7,7 @@ interface ApiInputProps {
   handleSendReq: (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => void;
   inputRef: RefObject<HTMLInputElement | null>;
   setMethod: React.Dispatch<React.SetStateAction<MethodsTypes>>;
+  setOpenRightSlider: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
@@ -15,7 +16,7 @@ function classNames(...classes: (string | boolean | undefined)[]): string {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef, setMethod }: ApiInputProps) {
+export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef, setMethod, setOpenRightSlider }: ApiInputProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("GET");
 
@@ -110,6 +111,7 @@ export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef,
       </button>
       <button
         className="ml-1.5 rounded-md bg-amber-600 px-1 py-2 text-sm font-semibold text-white cursor-pointer"
+        onClick={() => setOpenRightSlider(true)}
       >
         {`</>`}
       </button>

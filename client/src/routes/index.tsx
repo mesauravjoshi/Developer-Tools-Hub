@@ -2,7 +2,7 @@ import Home from '@/components/Home';
 import SignUp from '@/components/Auth/SignUp';
 import LogIn from '@/components/Auth/LogIn';
 import Request from '@/pages/Request';
-import Post from '@/components/Post/Post';
+// import Post from '@/components/Post/Post';
 import MainLayout from '@/layout/MainLayout';
 import {
   BrowserRouter as Router,
@@ -23,7 +23,7 @@ function Index() {
         {/* pages WITH layout */}
         <Route element={<MainLayout />}>
           <Route path="/request" element={<Request />} />
-          <Route path="/post" element={<Post />} />
+          {/* <Route path="/post" element={<Post />} /> */}
         </Route>
 
         <Route path="*" element={<div>Not found</div>} />

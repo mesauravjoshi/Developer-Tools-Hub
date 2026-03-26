@@ -19,7 +19,7 @@ export default function MainLayout() {
           setSidebarOpen={setSidebarOpen}
         />
 
-        <main className="py-4 bg-white dark:bg-gray-900">
+        <main className="bg-white dark:bg-gray-900">
           {/* 👇 Page will render here */}
           <Outlet />
         </main>
