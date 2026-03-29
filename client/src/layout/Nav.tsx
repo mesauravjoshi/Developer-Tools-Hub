@@ -9,7 +9,10 @@ import {
   Bars3Icon,
   BellIcon,
 } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import {
+  ChevronDownIcon,
+  // MagnifyingGlassIcon
+} from '@heroicons/react/20/solid'
 import axios from 'axios';
 import { useState } from 'react';
 import { AuthContext } from '@/Context/AuthContext';
@@ -98,8 +101,8 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
       <div aria-hidden="true" className="h-6 w-px bg-gray-300 dark:bg-gray-700 lg:hidden" />
 
       <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-        <form action="#" method="GET" className="grid flex-1 grid-cols-1">
-          <input
+        <div className="grid flex-1 grid-cols-1">
+          {/* <input
             name="search"
             type="search"
             placeholder="Search"
@@ -109,8 +112,8 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
           <MagnifyingGlassIcon
             aria-hidden="true"
             className="pointer-events-none col-start-1 row-start-1 size-5 self-center text-gray-400 dark:text-gray-500"
-          />
-        </form>
+          /> */}
+        </div>
         <div className="flex items-center gap-x-4 lg:gap-x-6">
           <button type="button" className="-m-2.5 p-2.5 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-300 transition-colors">
             <span className="sr-only">View notifications</span>

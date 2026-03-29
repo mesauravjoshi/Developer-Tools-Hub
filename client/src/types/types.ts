@@ -11,4 +11,39 @@ export interface ParamItem {
   enabled: boolean;
 }
 
+interface Headers {
+  'content-type'?: string;
+  'authorization'?: string;
+  'accept'?: string;
+  'user-agent'?: string;
+  'cache-control'?: string;
+  'postman-token'?: string;
+  'host'?: string;
+  'accept-encoding'?: string;
+  'connection'?: string;
+
+  // allow any other headers
+  // [key: string]: string | undefined;
+}
+
+export interface DisplayResponse {
+  data: string;
+  status: number;
+  statusText: string;
+  headers?: Headers;
+
+  time: number;
+  size: number;
+
+  ok: boolean;
+  redirected: boolean;
+  url: string;
+
+  // advanced
+  cookies?: Record<string, string>;
+  requestHeaders?: Record<string, string>;
+  responseType?: 'json' | 'text' | 'blob';
+  error?: string; // if request fails
+}
+
 export type MethodsTypes = "get" | "post" | "put" | "patch" | "delete";

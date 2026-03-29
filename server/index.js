@@ -63,7 +63,7 @@ app.post('/login', async (req, res) => {
             console.log('Email and password are required');
             res.status(400).json({ message: 'Email and password are required.' })
         }
-        
+
         const user = await User.findOne({ email });
         if (!user) {
             console.log('Invalid email');
@@ -90,6 +90,10 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/error_test', async (req, res) => {
+    // console.error('Testing error api :', err);
+    res.status(500).json({ error: 'Server error' });
+});
 
 app.listen(PORT, () => {
     console.log(`server is running in : http://localhost:${PORT}`);
