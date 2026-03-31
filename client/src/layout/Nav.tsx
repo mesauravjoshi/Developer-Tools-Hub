@@ -16,6 +16,7 @@ import {
 import axios from 'axios';
 import { useState } from 'react';
 import { AuthContext } from '@/Context/AuthContext';
+import { useTheme } from "@/hooks/useTheme";
 
 interface UserNavigationItem {
   name: string;
@@ -33,6 +34,7 @@ const userNavigation: UserNavigationItem[] = [
 ]
 
 export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
+  const { theme, toggleTheme } = useTheme();
   const [gravatarUrl, setGravatarUrl] = useState('');
   const auth = useContext(AuthContext);
 
@@ -62,29 +64,6 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
       generateGravatar();
     }
   }, [email]);
-
-  const [dark, setDark] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('AutoAPItheme');
-      if (stored === 'dark') return true;
-      if (stored === 'light') return false;
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (dark) {
-      root.classList.add('dark');
-      localStorage.setItem('AutoAPItheme', 'dark');
-    } else {
-      root.classList.remove('dark');
-      localStorage.setItem('AutoAPItheme', 'light');
-    }
-  }, [dark]);
-
-  const toggleDarkMode = () => setDark((prev) => !prev);
 
   return (
     <div className="sticky top-0 z-40 flex h-12 shrink-0 items-center gap-x-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8 transition-colors duration-300">
@@ -121,11 +100,11 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
           </button>
 
           <button
-            onClick={toggleDarkMode}
+            onClick={toggleTheme}
             className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none shadow-sm cursor-pointer"
             aria-label="Toggle dark mode"
           >
-            {dark ? (
+            {theme === "dark" ? (
               <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
