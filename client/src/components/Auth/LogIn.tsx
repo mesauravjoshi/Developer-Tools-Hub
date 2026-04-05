@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '@/Utils/api'
-import { useTheme } from "@/hooks/useTheme";
+import { loginApi } from '@/services/authService'
+import { useAuth } from "@/hooks/useAuth";
 
 const LogIn = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { login } = useAuth();
+
+  // const { theme, toggleTheme } = useTheme();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -19,52 +21,28 @@ const LogIn = () => {
     })
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const logIn = async () => {
-      console.log(formData);
-      try {
-        const response = await api.post(`/login`, formData);
-        if (response.status === 200) {
-          console.log(response.data.user);
-          const user = response.data.user;
-          localStorage.setItem('user_data', JSON.stringify(user));
-          navigate('/post')
-        }
-      } catch (error) {
-        console.error(error);
+    try {
+      const response = await loginApi(formData);
+      if (response.status === 200) {
+        console.log(response);
+        
+        return
+        login({
+          user: response.data.user,
+          token: response.data.token,
+        })
+        navigate('')
       }
+    } catch (error) {
+      console.error(error);
     }
-    logIn();
   }
 
   return (
     <>
-      <nav className="flex flex-wrap items-center justify-between py-4 md:py-6 gap-4">
-        {/* Logo */}
-        <div className="text-2xl font-extrabold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          AutoAPI
-        </div>
-
-        {/* Dark Mode Toggle */}
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none shadow-sm"
-          aria-label="Toggle dark mode"
-        >
-          {theme === 'dark' ? (
-            <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          ) : (
-            <svg className="w-5 h-5 text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            </svg>
-          )}
-        </button>
-      </nav>
-
       <div className="flex min-h-full flex-col justify-center py-6 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight ">Sign in to your account</h2>
@@ -81,7 +59,7 @@ const LogIn = () => {
                   <input
                     id="email"
                     name="email"
-                    type="email"
+                    // type="email"
                     required
                     value={formData.email}
                     onChange={handleChange}
@@ -214,9 +192,9 @@ const LogIn = () => {
           </div>
 
           <p className="mt-10 text-center text-sm/6 text-gray-400">
-            Not a member?{' '}
-            <Link to="#" className="font-semibold text-indigo-400 hover:text-indigo-300">
-              Start a 14 day free trial
+            Don't have account? {' '}
+            <Link to="/signup" className="font-semibold text-indigo-400 hover:text-indigo-300">
+              Sign up
             </Link>
           </p>
         </div>

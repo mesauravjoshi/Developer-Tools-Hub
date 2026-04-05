@@ -40,7 +40,9 @@ export default function Response({ displayResponse, loading }: ResponseProps) {
     URL.revokeObjectURL(url);
   };
 
-  const formatStatus = (status?: number) => {
+  type StatusColor = 'green' | 'yellow' | 'red' | 'gray';
+
+  const formatStatus = (status?: number): { text: string; color: StatusColor } => {
     if (!status) return { text: '200 OK', color: 'green' };
     if (status >= 200 && status < 300) return { text: `${status} OK`, color: 'green' };
     if (status >= 300 && status < 400) return { text: `${status} Redirect`, color: 'yellow' };

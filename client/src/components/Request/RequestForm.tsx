@@ -53,8 +53,7 @@ export default function RequestForm() {
 
       if (typeof response.data === 'object') {
         const toString = JSON.stringify((response.data), null, 2);
-        setDisplayResponse((prev) => ({
-          ...prev,
+        setDisplayResponse({
           data: toString,
           status: response.status,
           statusText: response.statusText,
@@ -66,8 +65,10 @@ export default function RequestForm() {
             ? Number(response.headers['content-length'])
             : new Blob([JSON.stringify(response.data)]).size,
           url: response.request?.responseURL,
-        }
-        ));
+
+          ok: response.status >= 200 && response.status < 300,
+          redirected: false,
+        });
         // setDisplayResponse(toString);
       }
 
@@ -131,7 +132,7 @@ export default function RequestForm() {
       }
     }
   }
-  console.log(displayResponse);
+  // console.log(displayResponse);
 
   const handleSendReq = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -144,7 +145,7 @@ export default function RequestForm() {
   return (
     <div className="py-4 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300 relative overflow-hidden">
 
-      <div className="max-w-4xl mx-auto py-4">
+      <div className=" mx-auto py-4">
         <ApiInput
           fullUrl={fullUrl}
           setFullUrl={setFullUrl}
