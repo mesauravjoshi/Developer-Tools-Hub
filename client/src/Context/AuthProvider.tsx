@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { AuthContext } from "@/Context/AuthContext";
+import { UserModelInterface } from "@/types/auth.type";
 
 type AuthProviderProps = {
   children: ReactNode;
-};
-
-type UserModelInterface = {
-  username: string;
-  email: string;
-  userId: string;
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {

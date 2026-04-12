@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import User from "#models/user.js";
 import jwt from "jsonwebtoken";
 import { Token } from "../models/token.js";
+import { protect } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -90,30 +91,17 @@ router.post("/login", async (req, res) => {
       user: userData,
       token,
     });
-    
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-router.post("/logout", async (req, res) => {
+router.post("/logout", protect, async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
+    const token = req.token;
 
-    const token = authHeader?.startsWith("Bearer ")
-      ? authHeader.split(" ")[1]
-      : null;
-
-    if (!token) {
-      return res.status(400).json({ message: "Token missing" });
-    }
-
-    const deleted = await Token.findOneAndDelete({ token });
-
-    if (!deleted) {
-      return res.status(404).json({ message: "Token not found" });
-    }
+    await Token.findOneAndDelete({ token });
 
     return res.status(200).json({
       message: "Logged out successfully",
