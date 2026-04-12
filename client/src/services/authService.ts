@@ -1,11 +1,5 @@
 import api from "@/Utils/api";
 
-// type UserModelInterface = {
-//   username: string;
-//   email: string;
-//   userId: string;
-// };
-
 export const loginApi = (data: { email: string; password: string }) => {
   return api.post("auth/login", data);
 };
@@ -19,5 +13,6 @@ export const signupApi = (data: {
 };
 
 export const logoutService = () => {
-  return api.post("/logout");
+  // console.log('service line 22');
+  return api.post("auth/logout");
 };

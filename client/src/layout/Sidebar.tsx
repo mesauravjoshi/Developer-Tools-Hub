@@ -113,8 +113,8 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                     <div className="text-xs/6 font-semibold text-gray-500 dark:text-gray-400">Your teams</div>
                   </li>
                   <li className="mt-auto">
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
                     >
                       <Cog6ToothIcon
@@ -122,7 +122,7 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                         className="size-6 shrink-0 text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200"
                       />
                       Settings
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </nav>
@@ -175,8 +175,8 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                 <div className="text-xs/6 font-semibold text-gray-500 dark:text-gray-400">Your teams</div>
               </li>
               <li className="mt-auto">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
                 >
                   <Cog6ToothIcon
@@ -184,7 +184,7 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                     className="size-6 shrink-0 text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200"
                   />
                   Settings
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

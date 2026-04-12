@@ -37,10 +37,10 @@ const Hero: React.FC = () => {
 
           {/* Navigation Links */}
           <div className="hidden sm:flex items-center space-x-6 md:space-x-8 text-sm font-medium">
-            <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Home</a>
-            <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Docs</a>
-            <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">About</a>
-            <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Github</a>
+            <Link to="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Home</Link>
+            <Link to="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Docs</Link>
+            <Link to="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">About</Link>
+            <Link to="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Github</Link>
           </div>
 
           {/* Dark Mode Toggle */}
