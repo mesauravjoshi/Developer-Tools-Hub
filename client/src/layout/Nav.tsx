@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import {
   Menu,
   MenuButton,
@@ -15,8 +15,9 @@ import {
 } from '@heroicons/react/20/solid'
 import axios from 'axios';
 import { useState } from 'react';
-import { AuthContext } from '@/Context/AuthContext';
+// import { AuthContext } from '@/Context/AuthContext';
 import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/hooks/useAuth";
 
 interface UserNavigationItem {
   name: string;
@@ -36,13 +37,10 @@ const userNavigation: UserNavigationItem[] = [
 export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
   const { theme, toggleTheme } = useTheme();
   const [gravatarUrl, setGravatarUrl] = useState('');
-  const auth = useContext(AuthContext);
+  const { user } = useAuth();
 
-  if (!auth) {
-    throw new Error("AuthContext not found");
-  }
-
-  const { username, email } = auth;
+  const username = user?.username;
+  const email = user?.email;
 
   useEffect(() => {
     const generateGravatar = async () => {
@@ -51,7 +49,7 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
           const response = await axios.get(`https://api.hashify.net/hash/md5/hex?value=${email}`);
           const hash = response.data?.Digest
           if (hash) {
-            console.log(`https://www.gravatar.com/avatar/${hash}?d=identicon`);
+            // console.log(`https://www.gravatar.com/avatar/${hash}?d=identicon`);
             setGravatarUrl(`https://www.gravatar.com/avatar/${hash}?d=identicon`);
           }
         } catch (error) {

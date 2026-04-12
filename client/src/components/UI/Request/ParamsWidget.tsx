@@ -31,6 +31,8 @@ const ParamsWidget: React.FC<ParamsWidgetProps> = ({
     //     `${encodeURIComponent(param.key.length > 0 ? param.key : 'a')}=${encodeURIComponent(param.value)}`
     //   );
     // const queryString = validParams.length ? `?${validParams.join('&')}` : '';
+    console.log(updatedParams);
+    
     const queryString = QueryString(updatedParams);
 
     if (indexOf_Q === -1) {

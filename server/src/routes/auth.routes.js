@@ -1,6 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import User from '#models/user.js';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -57,13 +58,30 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
+    // ✅ Generate JWT token
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN || '1d'
+      }
+    );
+
     const userData = {
       id: user._id,
       username: user.username,
       email: user.email
     };
 
-    res.status(200).json({ message: 'Login successful.', user: userData });
+    res.status(200).json({
+      message: 'Login successful.',
+      user: userData,
+      token
+    });
+    
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ error: 'Server error' });

@@ -20,6 +20,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const login = (data: { user: UserModelInterface; token: string }) => {
     setUser(data.user);
     setToken(data.token);
+
+    localStorage.setItem("AutoAPIUserData",JSON.stringify(data.user));
+    localStorage.setItem("AutoAPIAuthToken",data.token);
   };
 
   const logout = () => {
@@ -47,7 +50,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     fetchUserData();
-  }, [user]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, fetchUserData }}>

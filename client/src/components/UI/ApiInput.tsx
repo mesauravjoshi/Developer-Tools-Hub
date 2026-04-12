@@ -1,4 +1,4 @@
-import { useState, RefObject } from "react"
+import { useState, RefObject, useEffect, useRef } from "react"
 import { MethodsTypes } from '@/types/types';
 
 interface ApiInputProps {
@@ -19,6 +19,7 @@ function classNames(...classes: (string | boolean | undefined)[]): string {
 export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef, setMethod, setOpenRightSlider }: ApiInputProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("GET");
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const handleSelect = (m: string) => {
     setSelected(m);
@@ -56,11 +57,27 @@ export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef,
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex relative">
 
-      {/* ✅ Custom dropdown */}
-      <div className="relative">
+      <div className="relative" ref={dropdownRef}>
 
         {/* button */}
         <div

@@ -27,9 +27,8 @@ const LogIn = () => {
     try {
       const response = await loginApi(formData);
       if (response.status === 200) {
-        console.log(response);
-        
-        return
+        console.log(response)
+        // return
         login({
           user: response.data.user,
           token: response.data.token,

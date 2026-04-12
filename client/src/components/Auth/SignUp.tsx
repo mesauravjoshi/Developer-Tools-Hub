@@ -26,6 +26,9 @@ export default function SignUp() {
       try {
         const response = await signupApi(formData);
         console.log(response);
+        if(response.data) {
+
+        }
         // navigate('/login');
       } catch (error) {
         console.error(error);

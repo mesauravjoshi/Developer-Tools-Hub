@@ -1,4 +1,6 @@
-export const QueryString = (query) => {
+import { ParamItem } from '@/types/types';
+
+export const QueryString = (query: ParamItem[]) => {
 
     const validParams = query
         .filter(param => param.enabled && param.key.trim() !== '')
