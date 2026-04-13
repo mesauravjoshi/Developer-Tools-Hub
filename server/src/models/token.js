@@ -10,6 +10,7 @@ const tokenSchema = new mongoose.Schema(
     },
     token: {
       type: String,
+      enum: ["access", "refresh"],
       required: true,
     },
     type: {

@@ -1,4 +1,3 @@
-
 export type UserModelInterface = {
   username: string;
   email: string;

@@ -63,7 +63,7 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
   const handleSignOut = async () => {
     try {
       const response = await logoutService();
-      console.log(response);
+      // console.log(response);
       if (response.data) {
         logout();
       }
