@@ -1,9 +1,10 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
 
-import authRoutes from '#routes/auth.routes.js';
-import testRoutes from '#routes/test.routes.js';
+import authRoutes from "#routes/auth.routes.js";
+import testRoutes from "#routes/test.routes.js";
+import requestRoutes from "#routes/request.routes.js";
 
 const app = express();
 
@@ -13,7 +14,8 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/test', testRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/test", testRoutes);
+app.use("/api", requestRoutes);
 
 export default app;

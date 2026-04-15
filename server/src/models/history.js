@@ -15,7 +15,7 @@ const historySchema = new mongoose.Schema({
     enum: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
     required: true,
   },
-  calledAt: {
+  testedAt: {
     type: Date,
     default: Date.now,
   },
