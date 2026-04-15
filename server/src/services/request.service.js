@@ -1,82 +1,73 @@
 import axios from "axios";
 import History from "#models/history.js";
 
-const buildRequestConfig = ({ url, method, headers, data }) => {
-  const config = {
-    url,
-    method,
-    headers,
-    data,
-  };
+export const executeApiRequest = async ({ userId, url, method, headers, data }) => {
+  const startTime = Date.now();
 
-  const upperMethod = method?.toUpperCase();
+  try {
+    const response = await axios({ url, method, headers, data });
+    const responseTime = Date.now() - startTime;
 
-  if (["GET", "DELETE", "HEAD", "OPTIONS"].includes(upperMethod)) {
-    if (data !== undefined) {
-      config.params = data;
-    }
-  } else if (data !== undefined) {
-    config.data = data;
+    await saveHistory({
+      userId,
+      url,
+      method,
+      headers,
+      requestBody: data,
+      responseBody: response.data,
+      statusCode: response.status,
+      responseTime,
+    });
+
+    return { responseData: response.data, statusCode: response.status };
+  } catch (err) {
+    const responseTime = Date.now() - startTime;
+
+    // axios wraps HTTP error responses inside err.response
+    const axiosResponse = err.response;
+
+    await saveHistory({
+      userId,
+      url,
+      method,
+      headers,
+      requestBody: data,
+      responseBody: axiosResponse?.data ?? null,
+      statusCode: axiosResponse?.status ?? 0,
+      responseTime,
+    });
+
+    // Re-throw a clean, enriched error for the controller
+    const serviceError = new Error(
+      axiosResponse
+        ? `Upstream API returned ${axiosResponse.status}`
+        : "API request failed — network or DNS error"
+    );
+    serviceError.statusCode = axiosResponse?.status ?? 502;
+    serviceError.upstream = axiosResponse?.data ?? null;
+
+    throw serviceError;
   }
-
-  return config;
 };
 
-export const request = async ({ userId, url, method, headers, data }) => {
-  // console.log(userId, url, method, headers, data);
-
-  if (!url || !method) {
-    throw { status: 400, message: "URL and method are required!" };
-  }
-
+/**
+ * Persists a history record. Wrapped in its own try/catch so that
+ * a DB write failure never silently swallows the upstream error.
+ */
+const saveHistory = async ({ userId, url, method, headers, requestBody, responseBody, statusCode, responseTime }) => {
   try {
-    new URL(url);
-  } catch {
-    throw { status: 400, message: "Invalid URL provided." };
-  }
-
-  const startTime = Date.now();
-  const axiosConfig = buildRequestConfig({ url, method, headers, data });
-
-  let response;
-  try {
-    console.log("========test line ===========", axiosConfig);
-    // return { message: "User created successfully.", data: axiosConfig };
-
-    response = await axios({
-      ...axiosConfig,
-      validateStatus: () => true,
-    });
-    console.log("response", response);
-  } catch (error) {
-    console.log("err service", err);
-    const endTime = Date.now();
     await History.create({
       userId,
       apiUrl: url,
-      method: method.toUpperCase(),
-      testedAt: new Date(endTime),
+      method,
+      headers,
+      requestBody,
+      responseBody,
+      statusCode,
+      responseTime,
     });
-
-    throw {
-      status: error.response?.status || 500,
-      message: error.response?.data || error.message || "API request failed",
-    };
+  } catch (dbError) {
+    // Log and continue — history persistence should not break the main flow
+    console.error("[HistoryService] Failed to save history record:", dbError.message);
   }
-
-  const endTime = Date.now();
-  await History.create({
-    userId,
-    apiUrl: url,
-    method: method.toUpperCase(),
-    testedAt: new Date(endTime),
-  });
-
-  return {
-    status: response.status,
-    statusText: response.statusText,
-    data: response.data,
-    headers: response.headers,
-    requestTimeMs: endTime - startTime,
-  };
 };

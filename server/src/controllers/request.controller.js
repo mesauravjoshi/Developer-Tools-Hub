@@ -1,24 +1,31 @@
-import * as requestService from "#services/request.service.js";
+import { executeApiRequest } from "#services/request.service.js";
 
+/**
+ * POST /api/request
+ * Forwards an API request on behalf of the user and logs the result.
+ */
 export const sendRequest = async (req, res) => {
-  try {
-    const { url, method, headers, data } = req.body;
-    console.log("testing....");
+  const { url, method, headers, data } = req.body;
 
-    const result = await requestService.request({
+  if (!url || !method) {
+    return res.status(400).json({ error: "url and method are required." });
+  }
+
+  try {
+    const { responseData, statusCode } = await executeApiRequest({
       userId: req.user.id,
       url,
       method,
       headers,
       data,
     });
-    console.log("result", result);
-    return res.status(200).json(result);
-  } catch (err) {
-    console.error("err controler", err.message);
-    console.log("err controler", err);
-    return res.status(err.status || 500).json({
-      error: err.message || "Server error",
-    });
+
+    return res.status(statusCode).json(responseData);
+  } catch (error) {
+    // Structured error from service layer
+    const status = error.statusCode ?? 500;
+    const message = error.message ?? "An unexpected error occurred.";
+
+    return res.status(status).json({ error: message });
   }
 };
