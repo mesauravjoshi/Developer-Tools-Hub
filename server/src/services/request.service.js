@@ -6,7 +6,7 @@ const buildRequestConfig = ({ url, method, headers, data }) => {
     url,
     method,
     headers,
-    validateStatus: () => true,
+    data,
   };
 
   const upperMethod = method?.toUpperCase();
@@ -23,6 +23,8 @@ const buildRequestConfig = ({ url, method, headers, data }) => {
 };
 
 export const request = async ({ userId, url, method, headers, data }) => {
+  // console.log(userId, url, method, headers, data);
+
   if (!url || !method) {
     throw { status: 400, message: "URL and method are required!" };
   }
@@ -38,8 +40,16 @@ export const request = async ({ userId, url, method, headers, data }) => {
 
   let response;
   try {
-    response = await axios(axiosConfig);
+    console.log("========test line ===========", axiosConfig);
+    // return { message: "User created successfully.", data: axiosConfig };
+
+    response = await axios({
+      ...axiosConfig,
+      validateStatus: () => true,
+    });
+    console.log("response", response);
   } catch (error) {
+    console.log("err service", err);
     const endTime = Date.now();
     await History.create({
       userId,
