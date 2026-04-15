@@ -1,4 +1,4 @@
-import * as requestService from "../services/request.service.js";
+import * as requestService from "#services/request.service.js";
 
 export const sendRequest = async (req, res) => {
   try {

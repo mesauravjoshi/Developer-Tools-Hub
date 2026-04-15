@@ -1,5 +1,5 @@
 // controllers/auth.controller.js
-import * as authService from "../services/auth.service.js";
+import * as authService from "#services/auth.service.js";
 
 export const signup = async (req, res) => {
   try {

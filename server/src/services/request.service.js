@@ -1,5 +1,5 @@
 import axios from "axios";
-import History from "../models/history.js";
+import History from "#models/history.js";
 
 const buildRequestConfig = ({ url, method, headers, data }) => {
   const config = {

@@ -1,6 +1,6 @@
 import express from "express";
-import { sendRequest } from "../controllers/request.controller.js";
-import { protect } from "../middlewares/auth.middleware.js";
+import { sendRequest } from "#controllers/request.controller.js";
+import { protect } from "#middlewares/auth.middleware.js";
 import History from "#models/history.js";
 import axios from "axios";
 // import requestRoutes from "#routes/request.routes.js";
@@ -20,7 +20,7 @@ router.post("/request", protect, async (req, res) => {
       headers,
       data,
     });
-    console.log("line 22", url, method, headers, data);
+    // console.log("line 22", url, method, headers, data);
 
     const endTime = Date.now();
 
@@ -39,7 +39,6 @@ router.post("/request", protect, async (req, res) => {
     res.json(response.data);
   } catch (error) {
     const endTime = Date.now();
-    // console.log("ppppppppppp", error);
 
     await History.create({
       userId: req.user.id,

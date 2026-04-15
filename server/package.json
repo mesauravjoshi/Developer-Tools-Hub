@@ -5,7 +5,10 @@
   "imports": {
     "#config/*": "./src/config/*",
     "#models/*": "./src/models/*",
-    "#routes/*": "./src/routes/*"
+    "#controllers/*": "./src/controllers/*",
+    "#routes/*": "./src/routes/*",
+    "#middlewares/*": "./src/middlewares/*",
+    "#services/*": "./src/services/*"
   },
   "main": "server.js",
   "scripts": {

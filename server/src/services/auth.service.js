@@ -1,8 +1,8 @@
 // services/auth.service.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/user.js";
-import { Token } from "../models/token.js";
+import User from "#models/user.js";
+import { Token } from "#models/token.js";
 
 export const signup = async ({ username, email, password }) => {
   if (!username || !email || !password) {
