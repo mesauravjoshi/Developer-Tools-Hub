@@ -1,31 +1,42 @@
-import { useState, useRef } from 'react';
-import axios from 'axios';
-import { validateURL } from '@/Utils/ValidateURL';
-import ApiInput from '@/components/UI/ApiInput';
-import Request from '@/components/UI/Request/Request';
-import Response from '@/components/UI/Response';
-import { HeaderItem, ParamItem, MethodsTypes, DisplayResponse } from '@/types/types';
-import SnippetSlide from '@/components/UI/SnippetSlide';
+import { useState, useRef } from "react";
+// import axios from "axios";
+import { validateURL } from "@/Utils/ValidateURL";
+import ApiInput from "@/components/UI/ApiInput";
+import Request from "@/components/UI/Request/Request";
+import Response from "@/components/UI/Response";
+import {
+  HeaderItem,
+  ParamItem,
+  MethodsTypes,
+  DisplayResponse,
+} from "@/types/types";
+import SnippetSlide from "@/components/UI/SnippetSlide";
+import api from "@/Utils/api";
 
 export default function RequestForm() {
-  const [method, setMethod] = useState<MethodsTypes>('get');
-  const [displayResponse, setDisplayResponse] = useState<DisplayResponse | null>(null);
+  const [method, setMethod] = useState<MethodsTypes>("GET");
+  const [displayResponse, setDisplayResponse] =
+    useState<DisplayResponse | null>(null);
   const [loading, setLoading] = useState(false);
-  const [body, setBody] = useState('');
+  const [body, setBody] = useState("");
   const [header, setHeader] = useState<HeaderItem[]>([
-    { key: 'Content-Type', value: 'application/json', enabled: true },
-    { key: '', value: '', enabled: true },
+    { key: "Content-Type", value: "application/json", enabled: true },
+    { key: "", value: "", enabled: true },
   ]);
 
-  const [params, setParams] = useState<ParamItem[]>([{ id: Date.now(), key: '', value: '', enabled: true }]);
-  const [fullUrl, setFullUrl] = useState('');
+  const [params, setParams] = useState<ParamItem[]>([
+    { id: Date.now(), key: "", value: "", enabled: true },
+  ]);
+  const [fullUrl, setFullUrl] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [openRightSlider, setOpenRightSlider] = useState(false);
-  const [activeLang, setActiveLang] = useState<'curl' | 'fetch' | 'axios'>('curl');
+  const [activeLang, setActiveLang] = useState<"curl" | "fetch" | "axios">(
+    "curl",
+  );
 
   const buildHeaders = () => {
     const headers: Record<string, string> = {};
-    header.forEach(item => {
+    header.forEach((item) => {
       if (item.key && item.value && item.enabled !== false) {
         headers[item.key] = item.value;
       }
@@ -39,112 +50,112 @@ export default function RequestForm() {
       setLoading(true);
       const headers = buildHeaders();
 
-      let response;
+      console.log(method);
+      console.log(headers);
+      console.log(body);
+      console.log(fullUrl);
+      const payload = {
+        method,
+        headers,
+        body,
+        url: fullUrl,
+      };
 
-      if (method === "get" || method === "delete") {
-        response = await axios[method](fullUrl, { headers });
-      } else {
-        response = await axios[method](fullUrl, {}, { headers });
-      }
+      const response = await api.post(`/request`, payload);
       console.log(response);
 
       const end = performance.now();
       const time = end - start;
+      const toString = JSON.stringify(response.data, null, 2);
+      setDisplayResponse({
+        data: toString,
+        status: response.status,
+        statusText: response.statusText,
+        headers: {
+          "content-type": response.headers["content-type"],
+        },
+        time: time,
+        size: response.headers["content-length"]
+          ? Number(response.headers["content-length"])
+          : new Blob([JSON.stringify(response.data)]).size,
+        url: response.request?.responseURL,
 
-      if (typeof response.data === 'object') {
-        const toString = JSON.stringify((response.data), null, 2);
-        setDisplayResponse({
-          data: toString,
-          status: response.status,
-          statusText: response.statusText,
-          headers: {
-            'content-type': response.headers['content-type']
-          },
-          time: time,
-          size: response.headers['content-length']
-            ? Number(response.headers['content-length'])
-            : new Blob([JSON.stringify(response.data)]).size,
-          url: response.request?.responseURL,
-
-          ok: response.status >= 200 && response.status < 300,
-          redirected: false,
-        });
-        // setDisplayResponse(toString);
-      }
+        ok: response.status >= 200 && response.status < 300,
+        redirected: false,
+      });
 
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      const end = performance.now();
-      const time = end - start;
-      if (axios.isAxiosError(error)) {
-        // ✅ Server responded with error (4xx, 5xx)
-        if (error.response) {
-          console.log("Backend error:", error.response);
+      // const end = performance.now();
+      // const time = end - start;
+      // if (axios.isAxiosError(error)) {
+      //   // ✅ Server responded with error (4xx, 5xx)
+      //   if (error.response) {
+      //     console.log("Backend error:", error.response);
 
-          setDisplayResponse({
-            data: JSON.stringify(error.response.data, null, 2),
-            status: error.response.status,
-            statusText: error.response.statusText,
-            // headers: error.response.headers,
-            ok: false,
-            time: time,
-            size: 0,
-            redirected: false,
-            url: ""
-          });
-        }
+      //     setDisplayResponse({
+      //       data: JSON.stringify(error.response.data, null, 2),
+      //       status: error.response.status,
+      //       statusText: error.response.statusText,
+      //       // headers: error.response.headers,
+      //       ok: false,
+      //       time: time,
+      //       size: 0,
+      //       redirected: false,
+      //       url: "",
+      //     });
+      //   }
 
-        // ❌ No response (network error, server down)
-        else if (error.request) {
-          console.log("No response:", error.request);
+      //   // ❌ No response (network error, server down)
+      //   else if (error.request) {
+      //     console.log("No response:", error.request);
 
-          setDisplayResponse({
-            data: "No response from server",
-            status: 0,
-            statusText: "Network Error",
-            headers: {},
-            ok: false,
-            time: 0,
-            size: 0,
-            redirected: false,
-            url: ""
-          });
-        }
+      //     setDisplayResponse({
+      //       data: "No response from server",
+      //       status: 0,
+      //       statusText: "Network Error",
+      //       headers: {},
+      //       ok: false,
+      //       time: 0,
+      //       size: 0,
+      //       redirected: false,
+      //       url: "",
+      //     });
+      //   } else {
+      //     console.log("Error:", error.message);
 
-        else {
-          console.log("Error:", error.message);
-
-          setDisplayResponse({
-            data: error.message,
-            status: 0,
-            statusText: "Error",
-            headers: {},
-            ok: false,
-            time: 0,
-            size: 0,
-            redirected: false,
-            url: ""
-          });
-        }
-      } else {
-        console.log("Unknown error:", error);
-      }
+      //     setDisplayResponse({
+      //       data: error.message,
+      //       status: 0,
+      //       statusText: "Error",
+      //       headers: {},
+      //       ok: false,
+      //       time: 0,
+      //       size: 0,
+      //       redirected: false,
+      //       url: "",
+      //     });
+      //   }
+      // } else {
+      //   console.log("Unknown error:", error);
+      // }
     }
-  }
+  };
   // console.log(displayResponse);
 
-  const handleSendReq = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
+  const handleSendReq = (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+  ) => {
     e.preventDefault();
     setDisplayResponse(null);
     const isValid = validateURL(fullUrl);
     if (isValid) fetchAPI();
     // else setDisplayResponse('NO RECORD FOUND');
-  }
+  };
 
   return (
     <div className="py-4 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300 relative overflow-hidden">
-
       <div className=" mx-auto py-4">
         <ApiInput
           fullUrl={fullUrl}
@@ -181,5 +192,5 @@ export default function RequestForm() {
         body={body}
       />
     </div>
-  )
+  );
 }

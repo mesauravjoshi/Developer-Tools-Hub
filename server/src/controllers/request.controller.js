@@ -6,6 +6,7 @@ import { executeApiRequest } from "#services/request.service.js";
  */
 export const sendRequest = async (req, res) => {
   const { url, method, headers, data } = req.body;
+  // console.log(url, method, headers, data);
 
   if (!url || !method) {
     return res.status(400).json({ error: "url and method are required." });

@@ -46,4 +46,4 @@ export interface DisplayResponse {
   error?: string; // if request fails
 }
 
-export type MethodsTypes = "get" | "post" | "put" | "patch" | "delete";
+export type MethodsTypes = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
