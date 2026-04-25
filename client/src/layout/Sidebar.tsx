@@ -1,4 +1,4 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -6,18 +6,20 @@ import {
   TransitionChild,
 } from '@headlessui/react'
 import {
-  Bars3Icon,
-  BellIcon,
+  // Bars3Icon,
+  // BellIcon,
   Cog6ToothIcon,
   FolderIcon,
   HomeIcon,
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import axios from 'axios'
+// import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+// import axios from 'axios'
 // import { setIsSliderOpen } from '@/Store/Slice/SliderSlice'
-import { Link, useParams, useLocation } from 'react-router-dom'
+import { Link, 
+  // useParams ,
+  useLocation } from 'react-router-dom';
 
 interface NavigationItem {
   name: string
@@ -34,7 +36,8 @@ interface SliderProps {
 const navigation: NavigationItem[] = [
   { name: 'Request', href: '/request', icon: HomeIcon, current: true },
   { name: 'History', href: '/history', icon: UsersIcon, current: false },
-  { name: 'Environments', href: '/environments', icon: FolderIcon, current: false }
+  { name: 'Environments', href: '/environments', icon: FolderIcon, current: false },
+  { name: 'Collections', href: '/collections', icon: UsersIcon, current: false },
 ]
 
 function classNames(...classes: (string | boolean | undefined)[]): string {
@@ -132,8 +135,8 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
       </Dialog>
 
       {/* Static sidebar for desktop */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-4 border-r border-gray-200 dark:border-gray-800">
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-42 lg:flex-col">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-4 pb-4 border-r border-gray-200 dark:border-gray-800">
           <div className="flex h-16 shrink-0 items-center">
             <Link to={`/`}>
               <div className="text-2xl font-extrabold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -153,7 +156,7 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                           pathName === item.href
                             ? 'bg-blue-50 dark:bg-gray-800 text-blue-700 dark:text-white'
                             : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white',
-                          'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold transition-colors duration-200'
+                          'group flex gap-x-3 rounded-md p-2 text-sm font-semibold transition-colors duration-200'
                         )}
                       >
                         <item.icon
@@ -162,7 +165,7 @@ export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
                             pathName === item.href
                               ? 'text-blue-600 dark:text-white'
                               : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200',
-                            'size-6 shrink-0'
+                            'size-5 shrink-0'
                           )}
                         />
                         {item.name}

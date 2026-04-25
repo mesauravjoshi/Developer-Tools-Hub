@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import authRoutes from "#routes/auth.routes.js";
 import testRoutes from "#routes/test.routes.js";
 import requestRoutes from "#routes/request.routes.js";
+import historyRoutes from "#routes/history.routes.js";
 
 const app = express();
 
@@ -17,5 +18,6 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api", requestRoutes);
+app.use("/api", historyRoutes);
 
 export default app;

@@ -59,7 +59,7 @@ const saveHistory = async ({ userId, url, method, headers, requestBody, response
     await History.create({
       userId,
       apiUrl: url,
-      method,
+      method: method.toUpperCase(),
       headers,
       requestBody,
       responseBody,

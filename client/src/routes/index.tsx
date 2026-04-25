@@ -2,7 +2,7 @@ import Home from "@/components/Home";
 import SignUp from "@/components/Auth/SignUp";
 import LogIn from "@/components/Auth/LogIn";
 import Request from "@/pages/Request";
-// import Post from '@/components/Post/Post';
+import History from "@/pages/History";
 import MainLayout from "@/layout/MainLayout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "@/routes/ProtectedRoute";
@@ -20,7 +20,9 @@ function Index() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/request" element={<Request />} />
-            {/* <Route path="/post" element={<Post />} /> */}
+            <Route path="/history" element={<History />} />
+            <Route path="/environments" element={<History />} />
+            <Route path="/collections" element={<History />} />
           </Route>
         </Route>
 

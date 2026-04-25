@@ -13,7 +13,7 @@ export default function MainLayout() {
         setSidebarOpen={setSidebarOpen}
       />
 
-      <div className="lg:pl-72">
+      <div className="lg:pl-42">
         <NavBar
           // sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
