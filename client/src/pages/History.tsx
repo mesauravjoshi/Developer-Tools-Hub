@@ -1,10 +1,10 @@
-import History from '@/components/History'
+import HistoryComponent from '@/components/History/HistoryComponent'
 
 export default function Index() {
 
   return (
     <>
-      <History />
+      <HistoryComponent />
     </>
   )
 }

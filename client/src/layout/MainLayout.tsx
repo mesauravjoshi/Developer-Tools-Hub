@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Slider from "@/layout/Sidebar";
 import { NavBar } from "@/layout/Nav";
+import TabComponent from "@/components/TabComponent";
 
 export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function MainLayout() {
         />
 
         <main className="bg-white dark:bg-gray-900">
+          <TabComponent />
           {/* 👇 Page will render here */}
           <Outlet />
         </main>

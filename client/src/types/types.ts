@@ -46,4 +46,15 @@ export interface DisplayResponse {
   error?: string; // if request fails
 }
 
+export interface ApiHistory {
+  _id: string;
+  userId: string;
+  apiUrl: string;
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  statusCode: number;
+  responseTime: number;
+  isError: boolean;
+  testedAt: string;
+}
+
 export type MethodsTypes = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
