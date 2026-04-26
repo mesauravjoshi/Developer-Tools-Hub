@@ -1,4 +1,6 @@
 import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// const navigate = useNavigate(); // This returns a function
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -17,6 +19,10 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    if (error.response?.status === 401) {
+      window.location.href = "/login";
+      console.log("Unauthorized - redirect to login");
+    }
     return Promise.reject(error);
   }
 );
@@ -24,11 +30,14 @@ api.interceptors.request.use(
 // Response Interceptor
 api.interceptors.response.use(
   (response) => {
+    console.log(response);
+
     return response;
   },
   (error) => {
     // Example: handle unauthorized
     if (error.response?.status === 401) {
+      window.location.href = "/login";
       console.log("Unauthorized - redirect to login");
     }
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 // import axios from "axios";
 import { validateURL } from "@/Utils/ValidateURL";
 import ApiInput from "@/components/UI/ApiInput";
@@ -12,11 +12,16 @@ import {
 } from "@/types/types";
 import SnippetSlide from "@/components/UI/SnippetSlide";
 import api from "@/Utils/api";
+import { ApiHistory } from '@/types/types'
 
-export default function RequestForm() {
+export default function RequestForm({
+  defaultData,
+}: {
+  defaultData?: ApiHistory;
+}) {
+  // export default function RequestForm({default}:{default : string}) {
   const [method, setMethod] = useState<MethodsTypes>("GET");
-  const [displayResponse, setDisplayResponse] =
-    useState<DisplayResponse | null>(null);
+  const [displayResponse, setDisplayResponse] = useState<DisplayResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [body, setBody] = useState("");
   const [header, setHeader] = useState<HeaderItem[]>([
@@ -33,6 +38,16 @@ export default function RequestForm() {
   const [activeLang, setActiveLang] = useState<"curl" | "fetch" | "axios">(
     "curl",
   );
+
+  // console.log(defaultData);
+  useEffect(() => {
+    if (defaultData) {
+      console.log(defaultData.method);
+      
+      setMethod(defaultData.method);
+      setFullUrl(defaultData.apiUrl);
+    }
+  }, [defaultData])
 
   const buildHeaders = () => {
     const headers: Record<string, string> = {};

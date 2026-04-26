@@ -3,10 +3,12 @@ import {
   PlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { MethodsTypes } from '@/types/types'
 
 interface Tab {
   id: number;
   name: string;
+  method: MethodsTypes
 }
 
 function classNames(...classes: string[]) {
@@ -14,7 +16,7 @@ function classNames(...classes: string[]) {
 }
 
 const defaultTabs: Tab[] = [
-  { id: 1, name: "My Account" },
+  { id: 1, name: "New Tab", method: 'GET' },
 ];
 
 export default function TabComponent() {
@@ -22,9 +24,10 @@ export default function TabComponent() {
   const [activeTab, setActiveTab] = useState<number>(1);
 
   const addTab = () => {
-    const newTab = {
+    const newTab: Tab = {
       id: Date.now(),
       name: `New Tab ${tabs.length - 1}`,
+      method: 'GET',
     };
 
     setTabs((prev) => [...prev, newTab]);
@@ -63,8 +66,8 @@ export default function TabComponent() {
                 onClick={() => setActiveTab(tab.id)}
                 className={classNames(
                   "group relative flex items-center justify-between",
-                  "min-w-37.5 max-w-55 flex-1",
-                  "px-4 py-2 rounded-t-xl border",
+                  "min-w-27.5 max-w-40 flex-1",
+                  "px-3 py-2 rounded-t-xl border",
                   "transition-all duration-200",
                   active
                     ? "bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 border-b-white dark:border-b-gray-900 text-gray-900 dark:text-white shadow-sm"
@@ -72,6 +75,9 @@ export default function TabComponent() {
                 )}
               >
                 {/* slight browser tab curve feel */}
+                <span className="truncate text-sm font-medium">
+                  {tab.method}
+                </span>
                 <span className="truncate text-sm font-medium">
                   {tab.name}
                 </span>

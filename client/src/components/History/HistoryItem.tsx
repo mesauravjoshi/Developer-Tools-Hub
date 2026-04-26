@@ -28,13 +28,18 @@ function methodBadge(method: string) {
 export default function HistoryItem({
   item,
   onDelete,
+  setSelectedHistory
 }: {
   item: ApiHistory;
   onDelete: (id: string) => void;
+  setSelectedHistory: React.Dispatch<React.SetStateAction<ApiHistory | null>>;
 }) {
 
   return (
-    <div className="group rounded-xl border border-gray-200 dark:border-gray-800 p-2 transition hover:shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800/50">
+    <div className="group rounded-xl border border-gray-200 dark:border-gray-800 p-2 transition hover:shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800/50"
+      onClick={() => {
+        setSelectedHistory(item)
+      }}>
 
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">

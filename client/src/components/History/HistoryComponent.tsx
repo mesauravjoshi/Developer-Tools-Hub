@@ -6,6 +6,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { ApiHistory } from '@/types/types'
 import AccordionSection from '@/components/History/AccordionSection'
+import RequestForm from '@/components/Request/RequestForm'
+// import toast from "react-hot-toast";
+
 /* -------------------- Utils -------------------- */
 
 function getRelativeLabel(dateString: string) {
@@ -53,6 +56,7 @@ function EmptyState() {
 
 export default function HistoryComponent() {
   const [history, setHistory] = useState<ApiHistory[]>([]);
+  const [selectedHistory, setSelectedHistory] = useState<ApiHistory | null>(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -113,7 +117,6 @@ export default function HistoryComponent() {
     }
   };
 
-
   return (
     <div className="flex h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
 
@@ -147,6 +150,7 @@ export default function HistoryComponent() {
                   title={getRelativeLabel(date)}
                   items={items}
                   onDelete={handleRemoveHistory}
+                  setSelectedHistory={setSelectedHistory}
                 />
               ))}
             </div>
@@ -155,9 +159,17 @@ export default function HistoryComponent() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <main className="w-[68%] h-screen overflow-y-auto p-8">
+      <main className="w-[68%] h-screen overflow-y-auto">
+        {
+          selectedHistory &&
+        <RequestForm defaultData={selectedHistory} />
+        }
         <div className="max-w-3xl">
-          <h1 className="text-2xl font-bold mb-2">
+          <h1 className="text-2xl font-bold mb-2"
+            onClick={() => {
+              // toast.error("Welcome back!");
+            }}
+          >
             Request History
           </h1>
 

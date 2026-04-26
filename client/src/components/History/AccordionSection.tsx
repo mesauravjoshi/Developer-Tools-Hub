@@ -10,11 +10,13 @@ export default function AccordionSection({
   items,
   onDelete,
   defaultOpen = true,
+  setSelectedHistory
 }: {
   title: string;
   items: ApiHistory[];
   onDelete: (id: string) => void;
   defaultOpen?: boolean;
+  setSelectedHistory: React.Dispatch<React.SetStateAction<ApiHistory | null>>;
 }) {
   const [open, setOpen] = useState(defaultOpen);
 
@@ -48,6 +50,7 @@ export default function AccordionSection({
               key={item._id}
               item={item}
               onDelete={onDelete}
+              setSelectedHistory={setSelectedHistory}
             />
           ))}
         </div>
