@@ -5,7 +5,7 @@ import {
   TrashIcon
 } from "@heroicons/react/24/outline";
 import { ApiHistory } from '@/types/types'
-import Tooltip from '../Tooltip';
+import Tooltip from '@/components/Tooltip';
 
 function formatTime(date: string) {
   return new Date(date).toLocaleTimeString([], {

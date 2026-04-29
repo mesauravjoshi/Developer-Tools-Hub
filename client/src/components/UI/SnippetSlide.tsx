@@ -3,13 +3,14 @@ import { MethodsTypes } from '@/types/types';
 
 // type MethodsTypes = "get" | "post" | "put" | "patch" | "delete";
 type SnippetAPICallTypes = "curl" | "fetch" | "axios";
+type ExtendedMethodsTypes = MethodsTypes | "get" | "post" | "put" | "patch" | "delete";
 
 interface SnippetSlideProps {
   open: boolean;
   onClose: () => void;
   activeLang: "curl" | "fetch" | "axios";
   setActiveLang: (lang: "curl" | "fetch" | "axios") => void;
-  method: MethodsTypes;
+  method: ExtendedMethodsTypes;
   fullUrl: string;
   headers: Record<string, string>;
   body: string;

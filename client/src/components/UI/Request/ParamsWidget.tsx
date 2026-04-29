@@ -1,4 +1,4 @@
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { QueryString } from '../../../Utils/QueryString';
 import { ParamItem } from '@/types/types';
 
@@ -15,7 +15,7 @@ const ParamsWidget: React.FC<ParamsWidgetProps> = ({
   setParams,
   fullUrl,
   setFullUrl,
-  inputRef
+  // inputRef
 }) => {
 
   const handleParamChange = (index: number, field: string, value: string) => {
