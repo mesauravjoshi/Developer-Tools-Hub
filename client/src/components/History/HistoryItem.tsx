@@ -5,6 +5,7 @@ import {
   TrashIcon
 } from "@heroicons/react/24/outline";
 import { ApiHistory } from '@/types/types'
+import Tooltip from '../Tooltip';
 
 function formatTime(date: string) {
   return new Date(date).toLocaleTimeString([], {
@@ -73,9 +74,11 @@ export default function HistoryItem({
 
           <div className="flex items-center gap-2 min-w-0">
             <LinkIcon className="w-4 h-4 opacity-50 shrink-0" />
-            <p className="truncate text-sm font-medium">
-              {item.apiUrl}
-            </p>
+            <Tooltip content={item.apiUrl}>
+              <p className="truncate text-sm font-medium">
+                {item.apiUrl}
+              </p>
+            </Tooltip>
           </div>
         </div>
 

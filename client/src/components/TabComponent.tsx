@@ -40,7 +40,7 @@ export default function TabComponent() {
   ) => {
     e.stopPropagation();
 
-    if (tabs.length === 1) return;
+    // if (tabs.length === 1) return;
 
     const updatedTabs = tabs.filter((tab) => tab.id !== id);
 
@@ -82,7 +82,7 @@ export default function TabComponent() {
                   {tab.name}
                 </span>
 
-                {tabs.length > 1 && (
+                { (
                   <button
                     onClick={(e) => closeTab(e, tab.id)}
                     className="ml-3 rounded p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
