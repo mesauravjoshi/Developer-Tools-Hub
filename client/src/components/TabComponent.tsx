@@ -1,55 +1,20 @@
-import { useState } from "react";
+// import { useState } from "react";
 import {
   PlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { MethodsTypes } from '@/types/types'
-
-interface Tab {
-  id: number;
-  name: string;
-  method: MethodsTypes
-}
+// import { MethodsTypes } from '@/types/types'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/store/Store'
+import { addTab, closeTab, setActiveTab } from '@/store/Slice/tabSlice'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const defaultTabs: Tab[] = [
-  { id: 1, name: "New Tab", method: 'GET' },
-];
-
 export default function TabComponent() {
-  const [tabs, setTabs] = useState<Tab[]>(defaultTabs);
-  const [activeTab, setActiveTab] = useState<number>(1);
-
-  const addTab = () => {
-    const newTab: Tab = {
-      id: Date.now(),
-      name: `New Tab ${tabs.length - 1}`,
-      method: 'GET',
-    };
-
-    setTabs((prev) => [...prev, newTab]);
-    setActiveTab(newTab.id);
-  };
-
-  const closeTab = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    id: number
-  ) => {
-    e.stopPropagation();
-
-    // if (tabs.length === 1) return;
-
-    const updatedTabs = tabs.filter((tab) => tab.id !== id);
-
-    setTabs(updatedTabs);
-
-    if (activeTab === id) {
-      setActiveTab(updatedTabs[0].id);
-    }
-  };
+  const dispatch = useDispatch()
+  const { tabs, activeTab } = useSelector((state: RootState) => state.tabs)
 
   return (
     <div className="w-full border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
@@ -63,7 +28,7 @@ export default function TabComponent() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => dispatch(setActiveTab(tab.id))}
                 className={classNames(
                   "group relative flex items-center justify-between",
                   "min-w-27.5 max-w-40 flex-1",
@@ -82,9 +47,12 @@ export default function TabComponent() {
                   {tab.name}
                 </span>
 
-                { (
+                {(
                   <button
-                    onClick={(e) => closeTab(e, tab.id)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      dispatch(closeTab(tab.id))
+                    }}
                     className="ml-3 rounded p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
                   >
                     <XMarkIcon className="w-4 h-4" />
@@ -97,7 +65,7 @@ export default function TabComponent() {
 
         {/* Chrome style + button */}
         <button
-          onClick={addTab}
+          onClick={() => dispatch(addTab())}
           className="mb-0.5 shrink-0 rounded-full p-2 
           hover:bg-gray-100 dark:hover:bg-gray-800
           transition"

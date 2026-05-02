@@ -2,21 +2,21 @@ import { createSlice, } from "@reduxjs/toolkit";
 import { type PayloadAction } from "@reduxjs/toolkit";
 
 type SliderState = {
-    isSliderOpen: boolean;
+  isSliderOpen: boolean;
 };
 
 const initialState: SliderState = {
-    isSliderOpen: false,
+  isSliderOpen: false,
 };
 
 const sliderSlice = createSlice({
-    name: "slider",
-    initialState,
-    reducers: {
-        setIsSliderOpen: (state, action: PayloadAction<boolean>) => {
-            state.isSliderOpen = action.payload;
-        },
+  name: "slider",
+  initialState,
+  reducers: {
+    setIsSliderOpen: (state, action: PayloadAction<boolean>) => {
+      state.isSliderOpen = action.payload;
     },
+  },
 });
 
 export const { setIsSliderOpen } = sliderSlice.actions;

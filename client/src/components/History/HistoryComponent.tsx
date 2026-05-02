@@ -161,30 +161,30 @@ export default function HistoryComponent() {
       {/* RIGHT PANEL */}
       <main className="w-[68%] h-screen overflow-y-auto">
         {
-          selectedHistory &&
-        <RequestForm defaultData={selectedHistory} />
+          selectedHistory ?
+            <RequestForm defaultData={selectedHistory} /> :
+            <div className="max-w-3xl">
+              <h1 className="text-2xl font-bold mb-2"
+                onClick={() => {
+                  // toast.error("Welcome back!");
+                }}
+              >
+                Request History
+              </h1>
+
+              <p className="opacity-70 mb-8">
+                View grouped API request logs by date,
+                inspect status codes and endpoint activity.
+              </p>
+
+              <div className="rounded-2xl border border-gray-200 dark:border-gray-800 p-8">
+                <p className="opacity-70">
+                  Select a request from the history panel to show
+                  request/response details here.
+                </p>
+              </div>
+            </div>
         }
-        <div className="max-w-3xl">
-          <h1 className="text-2xl font-bold mb-2"
-            onClick={() => {
-              // toast.error("Welcome back!");
-            }}
-          >
-            Request History
-          </h1>
-
-          <p className="opacity-70 mb-8">
-            View grouped API request logs by date,
-            inspect status codes and endpoint activity.
-          </p>
-
-          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 p-8">
-            <p className="opacity-70">
-              Select a request from the history panel to show
-              request/response details here.
-            </p>
-          </div>
-        </div>
       </main>
     </div>
   );
