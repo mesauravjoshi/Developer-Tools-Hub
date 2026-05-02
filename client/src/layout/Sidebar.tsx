@@ -35,9 +35,9 @@ interface SliderProps {
 
 const navigation: NavigationItem[] = [
   { name: 'Request', href: '/request', icon: HomeIcon, current: true },
-  { name: 'History', href: '/history', icon: UsersIcon, current: false },
-  { name: 'Environments', href: '/environments', icon: FolderIcon, current: false },
   { name: 'Collections', href: '/collections', icon: UsersIcon, current: false },
+  { name: 'History', href: '/history', icon: UsersIcon, current: false },
+  { name: 'Environments', href: '/environments', icon: FolderIcon, current: false }
 ]
 
 function classNames(...classes: (string | boolean | undefined)[]): string {
@@ -46,7 +46,7 @@ function classNames(...classes: (string | boolean | undefined)[]): string {
 
 export default function Slider({ sidebarOpen, setSidebarOpen }: SliderProps) {
   // const dispatch = useDispatch()
-  const location = useLocation()
+  const location = useLocation();
   const pathName = location.pathname
 
   return (

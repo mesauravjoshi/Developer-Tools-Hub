@@ -4,8 +4,11 @@ import {
   LinkIcon,
   TrashIcon
 } from "@heroicons/react/24/outline";
-import { ApiHistory } from '@/types/types'
+import { ApiHistory } from '@/types/types';
 import Tooltip from '@/components/Tooltip';
+// import { RootState } from '@/store/Store';
+import { setHistoryTab } from '@/store/Slice/tabSlice';
+import { useDispatch } from 'react-redux';
 
 function formatTime(date: string) {
   return new Date(date).toLocaleTimeString([], {
@@ -35,11 +38,16 @@ export default function HistoryItem({
   onDelete: (id: string) => void;
   setSelectedHistory: React.Dispatch<React.SetStateAction<ApiHistory | null>>;
 }) {
+  const dispatch = useDispatch()
 
   return (
     <div className="group rounded-xl border border-gray-200 dark:border-gray-800 p-2 transition hover:shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800/50"
       onClick={() => {
         setSelectedHistory(item)
+        dispatch(setHistoryTab({
+          method: item.method,
+          name: `${item.apiUrl}`
+        }))
       }}>
 
       <div className="flex items-start justify-between gap-4">

@@ -8,6 +8,8 @@ interface ApiInputProps {
   inputRef: RefObject<HTMLInputElement | null>;
   setMethod: React.Dispatch<React.SetStateAction<MethodsTypes>>;
   setOpenRightSlider: React.Dispatch<React.SetStateAction<boolean>>;
+  selected: MethodsTypes;
+  setSelected: React.Dispatch<React.SetStateAction<MethodsTypes>>;
 }
 
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
@@ -16,12 +18,12 @@ function classNames(...classes: (string | boolean | undefined)[]): string {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef, setMethod, setOpenRightSlider }: ApiInputProps) {
+export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef, setMethod, setOpenRightSlider, selected, setSelected }: ApiInputProps) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState("GET");
+  // const [selected, setSelected] = useState("GET");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSelect = (m: string) => {
+  const handleSelect = (m: MethodsTypes) => {
     setSelected(m);
     setMethod(m.toLowerCase() as MethodsTypes);
     setOpen(false);
@@ -93,7 +95,7 @@ export default function ApiInput({ fullUrl, setFullUrl, handleSendReq, inputRef,
             {methods.map((m) => (
               <div
                 key={m}
-                onClick={() => handleSelect(m)}
+                onClick={() => handleSelect(m as MethodsTypes)}
                 className={classNames(`px-3 py-2 text-sm cursor-pointer hover:bg-indigo-500 hover:text-white
                   ${selected === m
                     ? "bg-indigo-600 text-white"

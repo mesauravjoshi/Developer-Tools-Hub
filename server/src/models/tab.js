@@ -13,6 +13,22 @@ const TabSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    method: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    sidebar: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    requestId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "History",
+      // required: true,
+      index: true,
+    },
   }
 );
 

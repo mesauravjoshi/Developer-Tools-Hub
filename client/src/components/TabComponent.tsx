@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import {
   PlusIcon,
   XMarkIcon,
@@ -7,14 +6,35 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store/Store'
 import { addTab, closeTab, setActiveTab } from '@/store/Slice/tabSlice'
+import { Tooltip } from "@/components/Tooltip";
+import api from "@/Utils/api";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function TabComponent() {
-  const dispatch = useDispatch()
-  const { tabs, activeTab } = useSelector((state: RootState) => state.tabs)
+  const dispatch = useDispatch();
+  const { tabs, activeTab } = useSelector((state: RootState) => state.tabs);
+
+  const handleAddTab = async () => {
+    try {
+      const payload = {
+        name: `New Tab ${tabs.length}`,
+        sidebar: "request",
+        method: 'GET'
+      }
+      const res = await api.post("/tabs", payload);
+      dispatch(addTab());
+      if (res.data) {
+        console.log(res);
+      } else {
+        console.error("Failed to create tab");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="w-full border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
@@ -43,21 +63,22 @@ export default function TabComponent() {
                 <span className="truncate text-sm font-medium">
                   {tab.method}
                 </span>
-                <span className="truncate text-sm font-medium">
-                  {tab.name}
-                </span>
+                <Tooltip content={tab.name}>
+                  <span className="truncate text-sm font-medium">
+                    {tab.name.slice(0, 9) + (tab.name.length > 9 ? "..." : "")}
+                  </span>
+                </Tooltip>
 
-                {(
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      dispatch(closeTab(tab.id))
-                    }}
-                    className="ml-3 rounded p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-                  >
-                    <XMarkIcon className="w-4 h-4" />
-                  </button>
-                )}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    dispatch(closeTab(tab.id))
+                  }}
+                  className="ml-3 rounded p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                >
+                  <XMarkIcon className="w-4 h-4" />
+                </div>
+
               </button>
             );
           })}
@@ -65,7 +86,7 @@ export default function TabComponent() {
 
         {/* Chrome style + button */}
         <button
-          onClick={() => dispatch(addTab())}
+          onClick={handleAddTab}
           className="mb-0.5 shrink-0 rounded-full p-2 
           hover:bg-gray-100 dark:hover:bg-gray-800
           transition"

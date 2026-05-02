@@ -7,6 +7,8 @@ import {
 import { ApiHistory } from '@/types/types'
 import AccordionSection from '@/components/History/AccordionSection'
 import RequestForm from '@/components/Request/RequestForm'
+// import { RootState } from "@/store/Store";
+// import { useSelector } from "react-redux";
 // import toast from "react-hot-toast";
 
 /* -------------------- Utils -------------------- */
@@ -59,6 +61,9 @@ export default function HistoryComponent() {
   const [selectedHistory, setSelectedHistory] = useState<ApiHistory | null>(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  // const [loadingReqForm, setLoadingReqForm] = useState(false);
+  // const { tabs } = useSelector((state: RootState) => state.tabs);
+  // console.log(tabs);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +75,6 @@ export default function HistoryComponent() {
         setHistory(res.data.data);
       } catch (error) {
         console.error(error);
-
       } finally {
         setLoading(false);
       }
@@ -78,6 +82,11 @@ export default function HistoryComponent() {
 
     fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   console.log('tabs');
+  //   setLoadingReqForm(true);
+  // }, [tabs]);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return history;
@@ -164,11 +173,7 @@ export default function HistoryComponent() {
           selectedHistory ?
             <RequestForm defaultData={selectedHistory} /> :
             <div className="max-w-3xl">
-              <h1 className="text-2xl font-bold mb-2"
-                onClick={() => {
-                  // toast.error("Welcome back!");
-                }}
-              >
+              <h1 className="text-2xl font-bold mb-2">
                 Request History
               </h1>
 
@@ -177,12 +182,6 @@ export default function HistoryComponent() {
                 inspect status codes and endpoint activity.
               </p>
 
-              <div className="rounded-2xl border border-gray-200 dark:border-gray-800 p-8">
-                <p className="opacity-70">
-                  Select a request from the history panel to show
-                  request/response details here.
-                </p>
-              </div>
             </div>
         }
       </main>

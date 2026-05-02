@@ -6,6 +6,7 @@ import authRoutes from "#routes/auth.routes.js";
 import testRoutes from "#routes/test.routes.js";
 import requestRoutes from "#routes/request.routes.js";
 import historyRoutes from "#routes/history.routes.js";
+import tabRoutes from "#routes/tab.routes.js";
 
 const app = express();
 
@@ -19,5 +20,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api", requestRoutes);
 app.use("/api", historyRoutes);
+app.use("/api", tabRoutes);
 
 export default app;

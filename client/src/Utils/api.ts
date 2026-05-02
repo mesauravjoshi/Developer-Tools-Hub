@@ -30,7 +30,7 @@ api.interceptors.request.use(
 // Response Interceptor
 api.interceptors.response.use(
   (response) => {
-    console.log(response);
+    // console.log(response);
 
     return response;
   },

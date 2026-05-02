@@ -13,6 +13,11 @@ import {
 import SnippetSlide from "@/components/UI/SnippetSlide";
 import api from "@/Utils/api";
 import { ApiHistory } from '@/types/types'
+// import {
+//   // useDispatch,
+//   useSelector
+// } from "react-redux";
+// import { RootState } from '@/store/Store'
 
 export default function RequestForm({
   defaultData,
@@ -21,6 +26,7 @@ export default function RequestForm({
 }) {
   // export default function RequestForm({default}:{default : string}) {
   const [method, setMethod] = useState<MethodsTypes>("GET");
+  const [selected, setSelected] = useState<MethodsTypes>("GET");
   const [displayResponse, setDisplayResponse] = useState<DisplayResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [body, setBody] = useState("");
@@ -40,10 +46,15 @@ export default function RequestForm({
   );
 
   // console.log(defaultData);
+  // useEffect(() => {
+  //   console.log('tabs');
+
+  // }, [tabs]);
+
   useEffect(() => {
     if (defaultData) {
-      console.log(defaultData.method);
-      
+      // console.log(defaultData.method);
+      setSelected(defaultData.method);
       setMethod(defaultData.method);
       setFullUrl(defaultData.apiUrl);
     }
@@ -65,10 +76,10 @@ export default function RequestForm({
       setLoading(true);
       const headers = buildHeaders();
 
-      console.log(method);
-      console.log(headers);
-      console.log(body);
-      console.log(fullUrl);
+      // console.log(method);
+      // console.log(headers);
+      // console.log(body);
+      // console.log(fullUrl);
       const payload = {
         method,
         headers,
@@ -77,7 +88,7 @@ export default function RequestForm({
       };
 
       const response = await api.post(`/request`, payload);
-      console.log(response);
+      // console.log(response);
 
       const end = performance.now();
       const time = end - start;
@@ -179,6 +190,8 @@ export default function RequestForm({
           inputRef={inputRef}
           setMethod={setMethod}
           setOpenRightSlider={setOpenRightSlider}
+          selected={selected}
+          setSelected={setSelected}
         />
 
         <Request
