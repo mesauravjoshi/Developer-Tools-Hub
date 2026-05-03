@@ -10,13 +10,11 @@ export default function AccordionSection({
   items,
   onDelete,
   defaultOpen = true,
-  setSelectedHistory
 }: {
   title: string;
   items: ApiHistory[];
   onDelete: (id: string) => void;
   defaultOpen?: boolean;
-  setSelectedHistory: React.Dispatch<React.SetStateAction<ApiHistory | null>>;
 }) {
   const [open, setOpen] = useState(defaultOpen);
 
@@ -29,7 +27,7 @@ export default function AccordionSection({
         <div className="flex items-center gap-3">
           <span className="font-semibold">{title}</span>
 
-          <span className="text-sm px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800">
+          <span className="px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800">
             {items.length}
           </span>
         </div>
@@ -50,7 +48,6 @@ export default function AccordionSection({
               key={item._id}
               item={item}
               onDelete={onDelete}
-              setSelectedHistory={setSelectedHistory}
             />
           ))}
         </div>

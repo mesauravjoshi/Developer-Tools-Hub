@@ -1,88 +1,137 @@
-import { createSlice, } from "@reduxjs/toolkit";
-import { type PayloadAction } from "@reduxjs/toolkit";
-import { MethodsTypes } from '@/types/types'
+import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+import { MethodsTypes, ApiHistory } from '@/types/types'
+import api from "@/Utils/api";
 
 export interface Tab {
-  id: number;
+  _id: string;
   name: string;
   sidebar: string;
-  method: MethodsTypes
+  method: MethodsTypes;
+  historyData?: ApiHistory;
 }
 
 const defaultTabs: Tab[] = [
-  { id: 1, name: "New Tab", sidebar: "request", method: 'GET' },
+  { _id: "default-1", name: "New Tab", sidebar: "request", method: 'GET' },
 ];
 
 type TabState = {
   tabs: Tab[];
-  activeTab: number;
+  activeTab: string;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
 };
 
 const initialState: TabState = {
   tabs: defaultTabs,
-  activeTab: 1,
+  activeTab: "default-1",
+  status: "idle",
+  error: null,
 };
+
+// Async Thunks
+export const fetchTabs = createAsyncThunk("tabs/fetchTabs", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get("/tabs");
+    return response.data.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || "Failed to fetch tabs");
+  }
+});
+
+export const addTabAsync = createAsyncThunk("tabs/addTabAsync", async (payload: { name: string; sidebar: string; method: MethodsTypes }, { rejectWithValue }) => {
+  try {
+    const response = await api.post("/tabs", payload);
+    return response.data.data; // the new tab from backend
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || "Failed to add tab");
+  }
+});
+
+export const removeTabAsync = createAsyncThunk("tabs/removeTabAsync", async (id: string, { rejectWithValue }) => {
+  try {
+    // If it's a local unsaved tab
+    if (id.startsWith("default-") || id.startsWith("history-")) {
+      return id;
+    }
+    await api.delete(`/tabs/${id}`);
+    return id;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || "Failed to remove tab");
+  }
+});
 
 const tabSlice = createSlice({
   name: "tabs",
   initialState,
   reducers: {
-    addTab: (state) => {
-      const newTab: Tab = {
-        id: Date.now(),
-        name: `New Tab ${state.tabs.length}`,
-        sidebar: "request",
-        method: 'GET'
-      }
-
-      state.tabs.push(newTab)
-      state.activeTab = newTab.id
-    },
-
-    // New action: Creates or updates a single history tab
-    setHistoryTab: (state, action: PayloadAction<{ method: MethodsTypes; name: string }>) => {
-      const HISTORY_TAB_ID = 999999999; // Fixed ID for history tab
-      const { method, name } = action.payload
+    addTabFromHistory: (state, action: PayloadAction<ApiHistory>) => {
+      const historyItem = action.payload;
+      const existingTabId = `history-${historyItem._id}`;
+      console.log(historyItem);
+      console.log(existingTabId);
       
-      // Check if history tab already exists
-      const existingTab = state.tabs.find(tab => tab.id === HISTORY_TAB_ID)
+      const existingTab = state.tabs.find(tab => tab._id === existingTabId) || state.tabs.find(tab => tab.historyData?._id === historyItem._id);
 
       if (existingTab) {
-        // Update existing history tab
-        existingTab.method = method
-        existingTab.name = name
+        state.activeTab = existingTab._id;
       } else {
-        // Create new history tab
         const newTab: Tab = {
-          id: HISTORY_TAB_ID,
-          name: name,
-          sidebar: "request",
-          method: method
-        }
-        state.tabs.push(newTab)
-      }
-
-      // Set as active tab
-      state.activeTab = HISTORY_TAB_ID
-    },
-
-    closeTab: (state, action: PayloadAction<number>) => {
-      const id = action.payload
-
-      const updatedTabs = state.tabs.filter(tab => tab.id !== id)
-
-      state.tabs = updatedTabs
-
-      if (state.activeTab === id && updatedTabs.length > 0) {
-        state.activeTab = updatedTabs[0].id
+          _id: existingTabId,
+          name: historyItem.apiUrl,
+          sidebar: "history",
+          method: historyItem.method,
+          historyData: historyItem
+        };
+        state.tabs.push(newTab);
+        state.activeTab = existingTabId;
       }
     },
 
-    setActiveTab: (state, action: PayloadAction<number>) => {
-      state.activeTab = action.payload
+    setActiveTab: (state, action: PayloadAction<string>) => {
+      state.activeTab = action.payload;
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      // fetchTabs
+      .addCase(fetchTabs.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchTabs.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        if (action.payload && action.payload.length > 0) {
+          state.tabs = action.payload;
+          state.activeTab = action.payload[0]._id;
+        }
+      })
+      .addCase(fetchTabs.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      // addTabAsync
+      .addCase(addTabAsync.fulfilled, (state, action) => {
+        state.tabs.push(action.payload);
+        state.activeTab = action.payload._id;
+      })
+      // removeTabAsync
+      .addCase(removeTabAsync.fulfilled, (state, action) => {
+        const idToRemove = action.payload;
+        const updatedTabs = state.tabs.filter(tab => tab._id !== idToRemove);
+        state.tabs = updatedTabs;
+
+        if (state.activeTab === idToRemove) {
+          state.activeTab = updatedTabs.length > 0 ? updatedTabs[0]._id : "";
+        }
+        
+        // If no tabs are left, we could optionally add a default tab back here
+        if (state.tabs.length === 0) {
+            const newTab: Tab = { _id: `default-${Date.now()}`, name: "New Tab", sidebar: "request", method: 'GET' };
+            state.tabs.push(newTab);
+            state.activeTab = newTab._id;
+        }
+      });
   }
 });
 
-export const { addTab, closeTab, setActiveTab, setHistoryTab } = tabSlice.actions
-export default tabSlice.reducer
+export const { addTabFromHistory, setActiveTab } = tabSlice.actions;
+export default tabSlice.reducer;

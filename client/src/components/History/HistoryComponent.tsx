@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { ApiHistory } from '@/types/types'
 import AccordionSection from '@/components/History/AccordionSection'
-import RequestForm from '@/components/Request/RequestForm'
+// import RequestForm from '@/components/Request/RequestForm'
 // import { RootState } from "@/store/Store";
 // import { useSelector } from "react-redux";
 // import toast from "react-hot-toast";
@@ -49,7 +49,7 @@ function EmptyState() {
   return (
     <div className="py-16 text-center">
       <ClockIcon className="mx-auto h-14 w-14 opacity-40" />
-      <p className="mt-4 text-sm opacity-70">
+      <p className="mt-4 opacity-70">
         No API history found
       </p>
     </div>
@@ -58,7 +58,7 @@ function EmptyState() {
 
 export default function HistoryComponent() {
   const [history, setHistory] = useState<ApiHistory[]>([]);
-  const [selectedHistory, setSelectedHistory] = useState<ApiHistory | null>(null);
+  // const [selectedHistory, setSelectedHistory] = useState<ApiHistory | null>(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   // const [loadingReqForm, setLoadingReqForm] = useState(false);
@@ -127,64 +127,41 @@ export default function HistoryComponent() {
   };
 
   return (
-    <div className="flex h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <aside className="w-[30%] h-screen border-r text-sm border-gray-200 dark:border-gray-800">
+      <div className="h-full overflow-y-auto p-3">
 
-      {/* LEFT PANEL */}
-      <aside className="w-[30%] h-screen border-r border-gray-200 dark:border-gray-800">
-        <div className="h-full overflow-y-auto p-3">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search endpoint or method..."
+          className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+        />
 
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search endpoint or method..."
-            className="text-sm w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-          />
-
-          {loading ? (
-            <div className="space-y-3">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="h-20 rounded-xl animate-pulse bg-gray-100 dark:bg-gray-800"
-                />
-              ))}
-            </div>
-          ) : groupedEntries.length === 0 ? (
-            <EmptyState />
-          ) : (
-            <div className="space-y-4">
-              {groupedEntries.map(([date, items]) => (
-                <AccordionSection
-                  key={date}
-                  title={getRelativeLabel(date)}
-                  items={items}
-                  onDelete={handleRemoveHistory}
-                  setSelectedHistory={setSelectedHistory}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </aside>
-
-      {/* RIGHT PANEL */}
-      <main className="w-[68%] h-screen overflow-y-auto">
-        {
-          selectedHistory ?
-            <RequestForm defaultData={selectedHistory} /> :
-            <div className="max-w-3xl">
-              <h1 className="text-2xl font-bold mb-2">
-                Request History
-              </h1>
-
-              <p className="opacity-70 mb-8">
-                View grouped API request logs by date,
-                inspect status codes and endpoint activity.
-              </p>
-
-            </div>
-        }
-      </main>
-    </div>
+        {loading ? (
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-20 rounded-xl animate-pulse bg-gray-100 dark:bg-gray-800"
+              />
+            ))}
+          </div>
+        ) : groupedEntries.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <div className="space-y-4">
+            {groupedEntries.map(([date, items]) => (
+              <AccordionSection
+                key={date}
+                title={getRelativeLabel(date)}
+                items={items}
+                onDelete={handleRemoveHistory}
+              // setSelectedHistory={setSelectedHistory}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </aside>
   );
 }

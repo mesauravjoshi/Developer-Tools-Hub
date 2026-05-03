@@ -6,9 +6,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { ApiHistory } from '@/types/types';
 import Tooltip from '@/components/Tooltip';
-// import { RootState } from '@/store/Store';
-import { setHistoryTab } from '@/store/Slice/tabSlice';
+import { addTabFromHistory } from '@/store/Slice/tabSlice';
 import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/Store';
 
 function formatTime(date: string) {
   return new Date(date).toLocaleTimeString([], {
@@ -31,23 +31,17 @@ function methodBadge(method: string) {
 
 export default function HistoryItem({
   item,
-  onDelete,
-  setSelectedHistory
+  onDelete
 }: {
   item: ApiHistory;
   onDelete: (id: string) => void;
-  setSelectedHistory: React.Dispatch<React.SetStateAction<ApiHistory | null>>;
 }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   return (
-    <div className="group rounded-xl border border-gray-200 dark:border-gray-800 p-2 transition hover:shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800/50"
+    <div className="group rounded-xl border border-gray-200 dark:border-gray-800 p-2 transition hover:shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer"
       onClick={() => {
-        setSelectedHistory(item)
-        dispatch(setHistoryTab({
-          method: item.method,
-          name: `${item.apiUrl}`
-        }))
+        dispatch(addTabFromHistory(item))
       }}>
 
       <div className="flex items-start justify-between gap-4">
@@ -92,8 +86,11 @@ export default function HistoryItem({
 
         <div className="text-sm opacity-60 shrink-0 flex items-center gap-2 min-w-0">
           {formatTime(item.testedAt)}
-          <TrashIcon className="w-4 h-4 cursor-pointer"
-            onClick={() => onDelete(item._id)}
+          <TrashIcon className="w-4 h-4 cursor-pointer hover:text-red-500 transition-colors z-10"
+            onClick={(e) => {
+                e.stopPropagation();
+                onDelete(item._id);
+            }}
           />
         </div>
       </div>

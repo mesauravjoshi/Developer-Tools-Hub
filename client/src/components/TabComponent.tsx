@@ -2,38 +2,25 @@ import {
   PlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-// import { MethodsTypes } from '@/types/types'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/store/Store'
-import { addTab, closeTab, setActiveTab } from '@/store/Slice/tabSlice'
+import { RootState, AppDispatch } from '@/store/Store'
+import { removeTabAsync, setActiveTab, addTabAsync } from '@/store/Slice/tabSlice'
 import { Tooltip } from "@/components/Tooltip";
-import api from "@/Utils/api";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function TabComponent() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { tabs, activeTab } = useSelector((state: RootState) => state.tabs);
 
-  const handleAddTab = async () => {
-    try {
-      const payload = {
-        name: `New Tab ${tabs.length}`,
-        sidebar: "request",
-        method: 'GET'
-      }
-      const res = await api.post("/tabs", payload);
-      dispatch(addTab());
-      if (res.data) {
-        console.log(res);
-      } else {
-        console.error("Failed to create tab");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleAddTab = () => {
+    dispatch(addTabAsync({
+      name: `New Tab ${tabs.length}`,
+      sidebar: "request",
+      method: 'GET'
+    }));
   }
 
   return (
@@ -43,12 +30,12 @@ export default function TabComponent() {
         {/* Tabs */}
         <div className="flex flex-1 items-end gap-1 min-w-0">
           {tabs.map((tab) => {
-            const active = activeTab === tab.id;
+            const active = activeTab === tab._id;
 
             return (
               <button
-                key={tab.id}
-                onClick={() => dispatch(setActiveTab(tab.id))}
+                key={tab._id}
+                onClick={() => dispatch(setActiveTab(tab._id))}
                 className={classNames(
                   "group relative flex items-center justify-between",
                   "min-w-27.5 max-w-40 flex-1",
@@ -72,7 +59,7 @@ export default function TabComponent() {
                 <div
                   onClick={(e) => {
                     e.stopPropagation()
-                    dispatch(closeTab(tab.id))
+                    dispatch(removeTabAsync(tab._id))
                   }}
                   className="ml-3 rounded p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
                 >
@@ -94,19 +81,6 @@ export default function TabComponent() {
           <PlusIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
         </button>
       </div>
-
-      {/* Active tab content demo */}
-      {/* <div className="p-5 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-        <h2 className="font-semibold text-lg">
-          {
-            tabs.find((tab) => tab.id === activeTab)?.name
-          }
-        </h2>
-
-        <p className="mt-2 text-sm opacity-70">
-          Active browser-style tab content goes here.
-        </p>
-      </div> */}
     </div>
   );
 }
