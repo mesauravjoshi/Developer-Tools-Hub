@@ -46,7 +46,7 @@ export default function HistoryItem({
 
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2 mb-2">
+          <div className="flex flex-wrap items-center gap-1 mb-1">
             <span
               className={`px-2.5 py-1 rounded-full text-sm font-semibold ${methodBadge(
                 item.method
@@ -68,10 +68,10 @@ export default function HistoryItem({
               )}
               {item.statusCode}
             </span>
-
+{/* 
             <span className="text-sm opacity-60">
               {item.responseTime}ms
-            </span>
+            </span> */}
           </div>
 
           <div className="flex items-center gap-2 min-w-0">
