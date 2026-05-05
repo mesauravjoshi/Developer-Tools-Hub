@@ -3,6 +3,7 @@ import SignUp from "@/components/Auth/SignUp";
 import LogIn from "@/components/Auth/LogIn";
 import Request from "@/pages/Request";
 import History from "@/pages/History";
+import Collection from "@/pages/Collection";
 import MainLayout from "@/layout/MainLayout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "@/routes/ProtectedRoute";
@@ -22,7 +23,7 @@ function Index() {
             <Route path="/request" element={<Request />} />
             <Route path="/history" element={<History />} />
             <Route path="/environments" element={<History />} />
-            <Route path="/collections" element={<History />} />
+            <Route path="/collections" element={<Collection />} />
           </Route>
         </Route>
 
