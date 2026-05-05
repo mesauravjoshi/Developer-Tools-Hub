@@ -2,27 +2,32 @@ import mongoose from "mongoose";
 
 const collectionSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-      index: true,
-    },
     name: {
       type: String,
       required: true,
       trim: true,
       maxlength: 100,
     },
-    apiUrl: {
+
+    description: {
       type: String,
-      required: true,
       trim: true,
+      maxlength: 500,
+      default: "",
     },
-    method: {
-      type: String,
-      enum: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
+
+    workspaceId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Workspace",
       required: true,
+      index: true,
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
     },
   },
   {
@@ -31,8 +36,11 @@ const collectionSchema = new mongoose.Schema(
   }
 );
 
-// Optional: prevent duplicate collection names per user
-collectionSchema.index({ userId: 1, name: 1 }, { unique: true });
+// Prevent duplicate collection names inside same workspace
+collectionSchema.index(
+  { workspaceId: 1, name: 1 },
+  { unique: true }
+);
 
 const Collection = mongoose.model("Collection", collectionSchema);
 

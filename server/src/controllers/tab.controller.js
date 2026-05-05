@@ -43,7 +43,7 @@ export const addTabRequest = async (req, res) => {
 };
 
 export const getTabRequest = async (req, res) => {
-  console.log('Testing for add tabs ');
+  // console.log('Testing for add tabs ');
 
   try {
     const userId = req.user.id;

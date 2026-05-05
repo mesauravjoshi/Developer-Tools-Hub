@@ -8,6 +8,7 @@ import requestRoutes from "#routes/request.routes.js";
 import historyRoutes from "#routes/history.routes.js";
 import tabRoutes from "#routes/tab.routes.js";
 import collectionRoutes from "#routes/collection.routes.js";
+import workspaceRoutes from "#routes/workspace.routes.js";
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use("/api", requestRoutes);
 app.use("/api", historyRoutes);
 app.use("/api", tabRoutes);
 app.use("/api", collectionRoutes);
+app.use("/api", workspaceRoutes);
 
 export default app;

@@ -90,7 +90,16 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
       />
 
       <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-        <div className="grid flex-1 grid-cols-1">
+        <div className="grid flex-1 grid-cols-4 gap-4">
+          <div
+            className="text-center cursor-pointer rounded-md border border-gray-500 dark:border-gray-600 px-2 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 my-2"
+          >
+            Home
+          </div>
+          <div
+            className="text-center cursor-pointer rounded-md border border-gray-500 dark:border-gray-600 px-2 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 my-2">
+            Workspace
+          </div>
           {/* <input
             name="search"
             type="search"

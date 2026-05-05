@@ -100,9 +100,9 @@ function CollectionAccordionSection({
       >
         <div className="flex items-center gap-3">
           <span className="font-semibold">{title}</span>
-          <span className="px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">
+          {/* <span className="px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">
             {items.length}
-          </span>
+          </span> */}
         </div>
         <ChevronDownIcon
           className={`w-5 h-5 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
