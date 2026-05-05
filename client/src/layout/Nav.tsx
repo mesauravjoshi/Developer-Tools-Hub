@@ -12,6 +12,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
 import { logoutService } from "@/services/authService";
+import api from "@/Utils/api";
 
 interface UserNavigationItem {
   name: string;
@@ -71,6 +72,48 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
       console.error(error);
     }
   };
+  const payload = [
+    {
+      "name": "Get Users",
+      "method": "GET",
+      "url": "https://api.example.com/users",
+      "collectionId": {
+        "$oid": "69fa45710aab17d14a1c0861"
+      }
+    },
+    {
+      "name": "Create User",
+      "method": "POST",
+      "url": "https://api.example.com/users",
+      "collectionId": {
+        "$oid": "69fa45710aab17d14a1c0861"
+      }
+    },
+    {
+      "name": "Update User",
+      "method": "PUT",
+      "url": "https://api.example.com/users/1",
+      "collectionId": {
+        "$oid": "69fa45710aab17d14a1c0862"
+      }
+    },
+    {
+      "name": "Delete User",
+      "method": "DELETE",
+      "url": "https://api.example.com/users/1",
+      "collectionId": {
+        "$oid": "69fa45710aab17d14a1c0862"
+      }
+    }
+  ]
+  const handleAddWorkSpace = async () => {
+    try {
+      const response = await api.post("/request/bulk",payload);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="sticky top-0 z-40 flex h-12 shrink-0 items-center gap-x-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8 transition-colors duration-300">
@@ -97,7 +140,9 @@ export const NavBar = ({ setSidebarOpen }: NavBarProps) => {
             Home
           </div>
           <div
-            className="text-center cursor-pointer rounded-md border border-gray-500 dark:border-gray-600 px-2 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 my-2">
+            className="text-center cursor-pointer rounded-md border border-gray-500 dark:border-gray-600 px-2 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 my-2"
+            onClick={() => handleAddWorkSpace()}
+          >
             Workspace
           </div>
           {/* <input
