@@ -69,6 +69,9 @@ const requestSchema = new mongoose.Schema(
 // Optional: index for faster queries inside a collection
 requestSchema.index({ collectionId: 1, name: 1 });
 
-const Request = mongoose.model("Request", requestSchema);
+const Request =
+  mongoose.models.Request || mongoose.model("Request", requestSchema);
+  
+// const Request = mongoose.model("Request", requestSchema);
 
 export default Request;

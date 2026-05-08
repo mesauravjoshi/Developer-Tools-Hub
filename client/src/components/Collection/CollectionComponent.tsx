@@ -140,7 +140,8 @@ export default function CollectionComponent() {
       try {
         setLoading(true);
         const res = await api.get("/collection");
-        setCollections(res.data.data);
+        console.log(res.data.collections);
+        setCollections(res.data.collections);
       } catch (error) {
         console.error(error);
       } finally {

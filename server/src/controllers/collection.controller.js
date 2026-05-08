@@ -1,26 +1,142 @@
-import Collection from "#models/collection.js";
+import mongoose from "mongoose";
+import Collection from "../models/Collection.js";
+import Request from "../models/Request.js";
 
-// Get all collections for the authenticated user
 export const getCollections = async (req, res) => {
   try {
-    console.log("Fetching collections for user:", req.user.id);
-    const collections = await Collection.find({ userId: req.user.id }).sort({ createdAt: -1 });
+    const userId = req.user.id;
+
+    const collections = await Collection.aggregate([
+      // Join workspace
+      {
+        $lookup: {
+          from: "workspaces",
+          localField: "workspaceId",
+          foreignField: "_id",
+          as: "workspace",
+        },
+      },
+
+      // Convert workspace array to object
+      {
+        $unwind: "$workspace",
+      },
+
+      // Access control
+      {
+        $match: {
+          $or: [
+            {
+              "workspace.ownerId": new mongoose.Types.ObjectId(userId),
+            },
+            {
+              "workspace.members": new mongoose.Types.ObjectId(userId),
+            },
+            {
+              createdBy: new mongoose.Types.ObjectId(userId),
+            },
+          ],
+        },
+      },
+
+      // Populate creator details
+      {
+        $lookup: {
+          from: "users",
+          localField: "createdBy",
+          foreignField: "_id",
+          as: "creator",
+        },
+      },
+
+      {
+        $unwind: {
+          path: "$creator",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
+      // Get requests using collectionId
+      {
+        $lookup: {
+          from: "requests", // MongoDB collection name
+          localField: "_id",
+          foreignField: "collectionId",
+          as: "requests",
+        },
+      },
+
+      // Final response shape
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1,
+          createdAt: 1,
+          updatedAt: 1,
+
+          workspace: {
+            _id: "$workspace._id",
+            name: "$workspace.name",
+          },
+
+          createdBy: {
+            _id: "$creator._id",
+            username: "$creator.username",
+            email: "$creator.email",
+          },
+
+          // Include request data
+          requests: {
+            $map: {
+              input: "$requests",
+              as: "req",
+              in: {
+                _id: "$$req._id",
+                name: "$$req.name",
+                method: "$$req.method",
+                url: "$$req.url",
+                headers: "$$req.headers",
+                queryParams: "$$req.queryParams",
+                body: "$$req.body",
+                lastResponse: "$$req.lastResponse",
+                createdAt: "$$req.createdAt",
+                updatedAt: "$$req.updatedAt",
+              },
+            },
+          },
+
+          // Optional request count
+          requestCount: {
+            $size: "$requests",
+          },
+        },
+      },
+
+      // Sort collections
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+    ]);
+
     res.status(200).json({
       success: true,
-      data: collections,
-      count: collections.length
+      count: collections.length,
+      collections,
     });
   } catch (error) {
     console.error("Error fetching collections:", error);
+
     res.status(500).json({
       success: false,
       message: "Failed to fetch collections",
-      error: error.message
+      error: error.message,
     });
   }
 };
 
-// Create a new collection
 export const createCollection = async (req, res) => {
   try {
     const { name, apiUrl, method } = req.body;
@@ -44,7 +160,7 @@ export const createCollection = async (req, res) => {
 
     // Create collection
     const collection = new Collection({
-      userId: req.user.id,
+      userId: req.user._id,
       name: name.trim(),
       apiUrl: apiUrl.trim(),
       method: method.toUpperCase()

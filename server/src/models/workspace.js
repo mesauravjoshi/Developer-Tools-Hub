@@ -35,6 +35,10 @@ workspaceSchema.index(
   { unique: true }
 );
 
-const Workspace = mongoose.model("Workspace", workspaceSchema);
+const Workspace =
+  mongoose.models.Workspace ||
+  mongoose.model("Workspace", workspaceSchema);
 
-export default Workspace;
+// const Workspace = mongoose.model("Workspace", workspaceSchema);
+
+export default Workspace
