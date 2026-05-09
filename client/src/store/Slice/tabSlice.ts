@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import { MethodsTypes, ApiHistory } from '@/types/types'
-import api from "@/Utils/api";
+import api from "@/lib/api";
 
 export interface Tab {
   _id: string;

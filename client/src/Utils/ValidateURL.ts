@@ -1,4 +1,4 @@
-export const validateURL = (getURL: string) => {
+export const ValidateURL = (getURL: string) => {
 
   if (getURL.trim().length === 0) {
     console.log(getURL);

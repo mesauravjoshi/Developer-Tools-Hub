@@ -1,5 +1,5 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { QueryString } from '../../../Utils/QueryString';
+import { QueryString } from '@/utils/queryString';
 import { ParamItem } from '@/types/types';
 
 interface ParamsWidgetProps {

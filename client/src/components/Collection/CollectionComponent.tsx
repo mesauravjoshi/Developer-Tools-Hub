@@ -1,118 +1,161 @@
 import { useEffect, useMemo, useState } from "react";
-import api from "@/Utils/api";
-import { ClockIcon, LinkIcon, TrashIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/Store";
-import { addTabFromHistory } from "@/store/Slice/tabSlice";
+import api from "@/lib/api";
+import {
+  ClockIcon,
+  LinkIcon,
+  TrashIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/outline";
+// import { useDispatch } from "react-redux";
+// import { AppDispatch } from "@/store/Store";
+// import { addTabFromHistory } from "@/store/Slice/tabSlice";
 import Tooltip from "@/components/Tooltip";
 import { MethodsTypes } from "@/types/types";
-
-interface CollectionItem {
+import { methodBadge } from '@/utils/getMethodStyles'
+interface RequestItem {
   _id: string;
-  userId: string;
   name: string;
-  apiUrl: string;
   method: MethodsTypes;
+  url: string;
+  headers: any[];
+  queryParams: any[];
+  body: {
+    type: string;
+  };
   createdAt?: string;
   updatedAt?: string;
 }
 
-function methodBadge(method: string) {
-  const map: Record<string, string> = {
-    GET: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-    POST: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-    PUT: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300",
-    PATCH: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
-    DELETE: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
+interface CollectionItem {
+  _id: string;
+  name: string;
+  description?: string;
+
+  workspace: {
+    _id: string;
+    name: string;
   };
-  return map[method] || "bg-gray-100";
+
+  createdBy: {
+    _id: string;
+    username: string;
+    email: string;
+  };
+
+  requests: RequestItem[];
+  requestCount: number;
 }
 
-function CollectionItemUI({ item, onDelete }: { item: CollectionItem; onDelete: (id: string) => void }) {
-  const dispatch = useDispatch<AppDispatch>();
+function RequestCard({
+  request,
+  onDelete,
+}: {
+  request: RequestItem;
+  onDelete: (id: string) => void;
+}) {
+  // const dispatch = useDispatch<AppDispatch>();
 
   const handleClick = () => {
-    dispatch(addTabFromHistory({
-      _id: item._id,
-      userId: item.userId,
-      apiUrl: item.apiUrl,
-      method: item.method as any,
-      statusCode: 200,
-      responseTime: 0,
-      isError: false,
-      testedAt: new Date().toISOString()
-    }));
+    // dispatch(
+    //   addTabFromHistory({
+    //     _id: request._id,
+    //     apiUrl: request.url,
+    //     method: request.method,
+    //     statusCode: 200,
+    //     responseTime: 0,
+    //     isError: false,
+    //     testedAt: new Date().toISOString(),
+    //   })
+    // );
   };
 
   return (
-    <div 
+    <div
       className="group rounded-xl border border-gray-200 dark:border-gray-800 p-2 transition hover:shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer"
       onClick={handleClick}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1 mb-1">
-            <span className={`px-2.5 py-1 rounded-full text-sm font-semibold ${methodBadge(item.method)}`}>
-              {item.method}
+            <span
+              className={`px-2.5 py-1 rounded-full text-sm font-semibold ${methodBadge(
+                request.method
+              )}`}
+            >
+              {request.method}
             </span>
           </div>
+
           <div className="flex items-center gap-2 min-w-0">
             <LinkIcon className="w-4 h-4 opacity-50 shrink-0" />
-            <Tooltip content={item.apiUrl}>
+
+            <Tooltip content={request.url}>
               <p className="truncate text-sm font-medium">
-                {item.apiUrl}
+                {request.url}
               </p>
             </Tooltip>
           </div>
         </div>
-        <div className="text-sm opacity-60 shrink-0 flex items-center gap-2 min-w-0">
-          <TrashIcon 
-            className="w-4 h-4 cursor-pointer hover:text-red-500 transition-colors z-10"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(item._id);
-            }}
-          />
-        </div>
+
+        <TrashIcon
+          className="w-4 h-4 cursor-pointer hover:text-red-500 transition-colors z-10"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(request._id);
+          }}
+        />
       </div>
     </div>
   );
 }
 
-function CollectionAccordionSection({
-  title,
-  items,
+function CollectionAccordion({
+  collection,
   onDelete,
-  defaultOpen = true,
 }: {
-  title: string;
-  items: CollectionItem[];
+  collection: CollectionItem;
   onDelete: (id: string) => void;
-  defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = useState(true);
 
   return (
     <div className="border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full px-4 py-2 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800/50 transition"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800/50 transition"
       >
         <div className="flex items-center gap-3">
-          <span className="font-semibold">{title}</span>
-          {/* <span className="px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">
-            {items.length}
-          </span> */}
+          <span className="font-semibold">{collection.name}</span>
+
+          <span className="px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">
+            {collection.requestCount}
+          </span>
         </div>
+
         <ChevronDownIcon
-          className={`w-5 h-5 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`w-5 h-5 transition-transform duration-300 ${open ? "rotate-180" : ""
+            }`}
         />
       </button>
-      <div className={`transition-all duration-300 overflow-hidden ${open ? "max-h-96 overflow-y-auto" : "max-h-0"}`}>
+
+      <div
+        className={`transition-all duration-300 overflow-hidden ${open ? "max-h-125 overflow-y-auto" : "max-h-0"
+          }`}
+      >
         <div className="p-4 pt-0 space-y-3">
-          {items.map((item) => (
-            <CollectionItemUI key={item._id} item={item} onDelete={onDelete} />
-          ))}
+          {collection.requests.length === 0 ? (
+            <p className="text-sm text-gray-500 py-2">
+              No requests found
+            </p>
+          ) : (
+            collection.requests.map((request) => (
+              <RequestCard
+                key={request._id}
+                request={request}
+                onDelete={onDelete}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -123,6 +166,7 @@ function EmptyState() {
   return (
     <div className="py-16 text-center">
       <ClockIcon className="mx-auto h-14 w-14 opacity-40" />
+
       <p className="mt-4 opacity-70">
         No Collections found
       </p>
@@ -139,8 +183,9 @@ export default function CollectionComponent() {
     const fetchData = async () => {
       try {
         setLoading(true);
+
         const res = await api.get("/collection");
-        console.log(res.data.collections);
+
         setCollections(res.data.collections);
       } catch (error) {
         console.error(error);
@@ -148,38 +193,45 @@ export default function CollectionComponent() {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
-  const filtered = useMemo(() => {
+  const filteredCollections = useMemo(() => {
     if (!search.trim()) return collections;
-    return collections.filter(
-      (item) =>
-        item.apiUrl.toLowerCase().includes(search.toLowerCase()) ||
-        item.method.toLowerCase().includes(search.toLowerCase()) ||
-        item.name.toLowerCase().includes(search.toLowerCase())
-    );
+
+    return collections.filter((collection) => {
+      const searchLower = search.toLowerCase();
+
+      return (
+        collection.name.toLowerCase().includes(searchLower) ||
+        collection.requests.some(
+          (req) =>
+            req.url.toLowerCase().includes(searchLower) ||
+            req.method.toLowerCase().includes(searchLower) ||
+            req.name.toLowerCase().includes(searchLower)
+        )
+      );
+    });
   }, [collections, search]);
 
-  const grouped = useMemo(() => {
-    return filtered.reduce((acc: Record<string, CollectionItem[]>, item) => {
-      const collectionName = item.name || "Untitled Collection";
-      if (!acc[collectionName]) {
-        acc[collectionName] = [];
-      }
-      acc[collectionName].push(item);
-      return acc;
-    }, {});
-  }, [filtered]);
-
-  const groupedEntries = Object.entries(grouped).sort((a, b) => a[0].localeCompare(b[0]));
-
-  const handleRemoveCollection = async (id: string) => {
+  const handleRemoveRequest = async (id: string) => {
     try {
-      await api.delete(`/collection/${id}`);
-      setCollections((prev) => prev.filter((item) => item._id !== id));
+      await api.delete(`/request/${id}`);
+
+      setCollections((prev) =>
+        prev.map((collection) => ({
+          ...collection,
+          requests: collection.requests.filter((req) => req._id !== id),
+          requestCount: collection.requests.filter((req) => req._id !== id)
+            .length,
+        }))
+      );
     } catch (error: any) {
-      console.error("Delete failed:", error?.response?.data?.message || error.message);
+      console.error(
+        "Delete failed:",
+        error?.response?.data?.message || error.message
+      );
     }
   };
 
@@ -202,16 +254,15 @@ export default function CollectionComponent() {
               />
             ))}
           </div>
-        ) : groupedEntries.length === 0 ? (
+        ) : filteredCollections.length === 0 ? (
           <EmptyState />
         ) : (
           <div className="space-y-4">
-            {groupedEntries.map(([name, items]) => (
-              <CollectionAccordionSection
-                key={name}
-                title={name}
-                items={items}
-                onDelete={handleRemoveCollection}
+            {filteredCollections.map((collection) => (
+              <CollectionAccordion
+                key={collection._id}
+                collection={collection}
+                onDelete={handleRemoveRequest}
               />
             ))}
           </div>

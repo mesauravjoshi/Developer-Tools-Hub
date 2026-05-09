@@ -12,7 +12,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
 import { logoutService } from "@/services/authService";
-import api from "@/Utils/api";
+import api from "@/lib/api";
 
 interface UserNavigationItem {
   name: string;

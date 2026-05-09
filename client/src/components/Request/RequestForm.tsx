@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 // import axios from "axios";
-import { validateURL } from "@/Utils/ValidateURL";
+import { ValidateURL } from '@/utils/validateURL';
 import ApiInput from "@/components/UI/ApiInput";
 import Request from "@/components/UI/Request/Request";
 import Response from "@/components/UI/Response";
@@ -11,7 +11,7 @@ import {
   DisplayResponse,
 } from "@/types/types";
 import SnippetSlide from "@/components/UI/SnippetSlide";
-import api from "@/Utils/api";
+import api from "@/lib/api";
 import { ApiHistory } from '@/types/types'
 // import {
 //   // useDispatch,
@@ -175,7 +175,7 @@ export default function RequestForm({
   ) => {
     e.preventDefault();
     setDisplayResponse(null);
-    const isValid = validateURL(fullUrl);
+    const isValid = ValidateURL(fullUrl);
     if (isValid) fetchAPI();
     // else setDisplayResponse('NO RECORD FOUND');
   };
