@@ -7,6 +7,7 @@ import RequestForm from "@/components/Request/RequestForm";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/Store";
 import { fetchTabs } from "@/store/Slice/tabSlice";
+import EmptyRequest from "@/components/EmptyRequest";
 
 export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,7 +20,7 @@ export default function MainLayout() {
 
   const { tabs, activeTab } = useSelector((state: RootState) => state.tabs);
   const activeTabData = tabs.find(t => t._id === activeTab);
-  // console.log(activeTabData);
+  console.log(tabs);
 
   // console.log(location.pathname !== '/request' && location.pathname !== '/');
   const isNotRequestRoute = location.pathname !== '/request' && location.pathname !== '/';
@@ -60,7 +61,10 @@ export default function MainLayout() {
 
               {/* Content */}
               <main className="flex-1">
-                <RequestForm defaultData={activeTabData?.historyData} />
+                {
+                  tabs.length === 0 ? <EmptyRequest /> :
+                    <RequestForm defaultData={activeTabData?.historyData} />
+                }
                 {/* <div className="rounded-lg shadow h-full">
                   Main Content Area
                 </div> */}
