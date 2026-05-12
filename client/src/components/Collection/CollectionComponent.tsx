@@ -6,9 +6,9 @@ import {
   TrashIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 // import { AppDispatch } from "@/store/Store";
-// import { addTabFromHistory } from "@/store/Slice/tabSlice";
+import { addCollectionTab } from "@/store/Slice/tabSlice";
 import Tooltip from "@/components/Tooltip";
 import { MethodsTypes } from "@/types/types";
 import { methodBadge } from '@/utils/getMethodStyles'
@@ -53,20 +53,12 @@ function RequestCard({
   request: RequestItem;
   onDelete: (id: string) => void;
 }) {
-  // const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
 
   const handleClick = () => {
-    // dispatch(
-    //   addTabFromHistory({
-    //     _id: request._id,
-    //     apiUrl: request.url,
-    //     method: request.method,
-    //     statusCode: 200,
-    //     responseTime: 0,
-    //     isError: false,
-    //     testedAt: new Date().toISOString(),
-    //   })
-    // );
+    dispatch(
+      addCollectionTab(request)
+    );
   };
 
   return (
@@ -117,6 +109,7 @@ function CollectionAccordion({
   onDelete: (id: string) => void;
 }) {
   const [open, setOpen] = useState(true);
+  console.log(collection);
 
   return (
     <div className="border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">

@@ -50,13 +50,18 @@ export default function RequestForm({
   //   console.log('tabs');
 
   // }, [tabs]);
+  // console.log(defaultData?.url);
 
   useEffect(() => {
     if (defaultData) {
       // console.log(defaultData.method);
       setSelected(defaultData.method);
       setMethod(defaultData.method);
-      setFullUrl(defaultData.apiUrl);
+      if(defaultData?.url){
+        setFullUrl(defaultData?.url);
+      } else {
+        setFullUrl(defaultData.apiUrl);
+      }
     }
   }, [defaultData])
 

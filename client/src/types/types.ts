@@ -50,6 +50,7 @@ export interface ApiHistory {
   _id: string;
   userId: string;
   apiUrl: string;
+  url?: string;
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   statusCode: number;
   responseTime: number;
