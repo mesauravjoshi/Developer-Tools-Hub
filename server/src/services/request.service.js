@@ -1,5 +1,5 @@
 import axios from "axios";
-import History from "#models/history.js";
+import RequestHistory from "#models/history.js";
 
 export const executeApiRequest = async ({ userId, url, method, headers, data }) => {
   const startTime = Date.now();
@@ -56,9 +56,11 @@ export const executeApiRequest = async ({ userId, url, method, headers, data }) 
  */
 const saveHistory = async ({ userId, url, method, headers, requestBody, responseBody, statusCode, responseTime }) => {
   try {
-    await History.create({
+    console.log('saving data......');
+    
+    await RequestHistory.create({
       userId,
-      apiUrl: url,
+      url: url,
       method: method.toUpperCase(),
       headers,
       requestBody,

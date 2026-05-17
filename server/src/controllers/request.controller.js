@@ -8,7 +8,7 @@ import mongoose from "mongoose";
  */
 export const sendRequest = async (req, res) => {
   const { url, method, headers, data } = req.body;
-  // console.log(url, method, headers, data);
+  console.log(url, method, headers, data);
 
   if (!url || !method) {
     return res.status(400).json({ error: "url and method are required." });
@@ -22,6 +22,7 @@ export const sendRequest = async (req, res) => {
       headers,
       data,
     });
+    // console.log('responseData', responseData);
 
     return res.status(statusCode).json(responseData);
   } catch (error) {

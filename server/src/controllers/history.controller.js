@@ -1,4 +1,4 @@
-import History from "#models/history.js";
+import RequestHistory  from "#models/history.js";
 
 /**
  * GET /api/history
@@ -8,7 +8,7 @@ export const historyRequest = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const history = await History.find({ userId }).sort({ testedAt: -1 });
+    const history = await RequestHistory.find({ userId }).sort({ testedAt: -1 });
     return res.status(200).json({
       success: true,
       count: history.length,
@@ -29,7 +29,7 @@ export const historyDelete = async (req, res) => {
     const userId = req.user.id;
     const { id } = req.params;
 
-    const deletedHistory = await History.findOneAndDelete({
+    const deletedHistory = await RequestHistory.findOneAndDelete({
       _id: id,
       userId, // ensures user can only delete own history
     });

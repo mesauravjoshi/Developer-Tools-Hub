@@ -2,6 +2,7 @@ export type UserModelInterface = {
   username: string;
   email: string;
   userId: string;
+  workspaceId: string
 };
 
 export type AuthContextType = {

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const historySchema = new mongoose.Schema(
+const requestHistorySchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -8,8 +8,14 @@ const historySchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    requestId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Request",
+      required: true,
+      index: true,
+    },
 
-    apiUrl: {
+    url: {
       type: String,
       required: true,
       trim: true,
@@ -24,35 +30,18 @@ const historySchema = new mongoose.Schema(
       of: String,
       default: {},
     },
-    requestBody: {
+    body: {
       type: mongoose.Schema.Types.Mixed,
       default: null,
     },
 
     // ── Response ───────────────────────────────────────────────
-    statusCode: {
-      type: Number,
-      required: true,
-    },
-    responseBody: {
-      type: mongoose.Schema.Types.Mixed,
-      default: null,
-    },
-    responseTime: {
-      type: Number,
-      required: true,
-      min: 0,
+    response: {
+      status: Number,
+      data: mongoose.Schema.Types.Mixed,
+      time: Number, // in ms
     },
 
-    // ── Meta ───────────────────────────────────────────────────
-    isError: {
-      type: Boolean,
-      default: false,
-    },
-    testedAt: {
-      type: Date,
-      default: Date.now,
-    },
   },
   {
     timestamps: false, // testedAt already serves this purpose
@@ -61,8 +50,8 @@ const historySchema = new mongoose.Schema(
 );
 
 // Compound index — most common query pattern: fetch a user's history, newest first
-historySchema.index({ userId: 1, testedAt: -1 });
+requestHistorySchema.index({ userId: 1, testedAt: -1 });
 
-const History = mongoose.model("History", historySchema);
+const RequestHistory = mongoose.model("RequestHistory ", requestHistorySchema);
 
-export default History;
+export default RequestHistory;

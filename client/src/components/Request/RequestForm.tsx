@@ -60,7 +60,7 @@ export default function RequestForm({
       if(defaultData?.url){
         setFullUrl(defaultData?.url);
       } else {
-        setFullUrl(defaultData.apiUrl);
+        setFullUrl(defaultData.url);
       }
     }
   }, [defaultData])

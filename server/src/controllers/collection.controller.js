@@ -139,55 +139,49 @@ export const getCollections = async (req, res) => {
 
 export const createCollection = async (req, res) => {
   try {
-    const { name, apiUrl, method } = req.body;
+    const { name, description, workspaceId } = req.body;
 
     // Validate required fields
-    if (!name || !apiUrl || !method) {
+    if (!name || !workspaceId) {
       return res.status(400).json({
         success: false,
-        message: "Name, apiUrl, and method are required"
+        message: "Name and workspaceId are required",
       });
     }
 
-    // Validate method
-    const validMethods = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"];
-    if (!validMethods.includes(method.toUpperCase())) {
-      return res.status(400).json({
+    // Check duplicate collection name inside same workspace
+    const existingCollection = await Collection.findOne({
+      workspaceId,
+      name: name.trim(),
+    });
+
+    if (existingCollection) {
+      return res.status(409).json({
         success: false,
-        message: "Invalid HTTP method"
+        message: "Collection with this name already exists in this workspace",
       });
     }
 
     // Create collection
-    const collection = new Collection({
-      userId: req.user._id,
+    const collection = await Collection.create({
       name: name.trim(),
-      apiUrl: apiUrl.trim(),
-      method: method.toUpperCase()
+      description,
+      workspaceId,
+      createdBy: req.user.id,
     });
 
-    const savedCollection = await collection.save();
-
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Collection created successfully",
-      data: savedCollection
+      data: collection,
     });
   } catch (error) {
-    console.error("Error creating collection:", error);
+    console.error("Create Collection Error:", error);
 
-    // Handle duplicate key error
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: "A collection with this name already exists"
-      });
-    }
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Failed to create collection",
-      error: error.message
+      message: "Internal server error",
+      error: error.message,
     });
   }
 };
@@ -197,46 +191,42 @@ export const deleteCollection = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!id) {
-      return res.status(400).json({
-        success: false,
-        message: "Collection ID is required"
-      });
-    }
+    // Find collection
+    const collection = await Collection.findById(id);
 
-    // Find and delete collection (only if it belongs to the user)
-    const deletedCollection = await Collection.findOneAndDelete({
-      _id: id,
-      userId: req.user.id
-    });
-
-    if (!deletedCollection) {
+    if (!collection) {
       return res.status(404).json({
         success: false,
-        message: "Collection not found or you don't have permission to delete it"
+        message: "Collection not found",
       });
     }
 
-    res.status(200).json({
+    // Optional: check ownership
+    // if (collection.createdBy.toString() !== req.user._id.toString()) {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Unauthorized",
+    //   });
+    // }
+
+    // Delete all requests inside collection
+    await Request.deleteMany({
+      collectionId: id,
+    });
+
+    // Delete collection
+    await Collection.findByIdAndDelete(id);
+
+    return res.status(200).json({
       success: true,
       message: "Collection deleted successfully",
-      data: deletedCollection
     });
   } catch (error) {
-    console.error("Error deleting collection:", error);
-
-    // Handle invalid ObjectId
-    if (error.name === "CastError") {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid collection ID"
-      });
-    }
-
-    res.status(500).json({
+    console.error("Delete Collection Error:", error);
+    return res.status(500).json({
       success: false,
-      message: "Failed to delete collection",
-      error: error.message
+      message: "Internal server error",
+      error: error.message,
     });
   }
 };

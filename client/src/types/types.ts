@@ -49,9 +49,8 @@ export interface DisplayResponse {
 export interface ApiHistory {
   _id: string;
   userId: string;
-  apiUrl: string;
-  url?: string;
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  url: string;
+  method: MethodsTypes;
   statusCode: number;
   responseTime: number;
   isError: boolean;

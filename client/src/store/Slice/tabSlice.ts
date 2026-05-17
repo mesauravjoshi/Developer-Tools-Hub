@@ -124,26 +124,51 @@ const tabSlice = createSlice({
     },
 
     addTabFromHistory: (state, action: PayloadAction<ApiHistory>) => {
-      const historyItem = action.payload;
-      const existingTabId = `history-${historyItem._id}`;
-      console.log(current(state));
-      // console.log(existingTabId);
+      const selectedHistoryItem = action.payload;
+      const existingTabId = `history-${selectedHistoryItem._id}`;
+      const hasHistoryId = current(state).tabs.some(item =>
+        item._id.startsWith("history")
+      );
 
-      const existingTab = state.tabs.find(tab => tab._id === existingTabId) || state.tabs.find(tab => tab.historyData?._id === historyItem._id);
+      console.log('start with history', hasHistoryId);
+      console.log('current tab ', current(state).tabs);
 
-      if (existingTab) {
-        state.activeTab = existingTab._id;
-      } else {
+      if (hasHistoryId) {
+        console.log('Updating history tab');
+
+        // find existing history tab
+        const historyTab = state.tabs.find(tab =>
+          tab._id.startsWith("history")
+        );
+
+        if (historyTab) {
+          // update only that tab
+          historyTab.name = String(selectedHistoryItem.url);
+          historyTab.sidebar = "history";
+          historyTab.method = selectedHistoryItem.method;
+          historyTab.historyData = selectedHistoryItem;
+
+          // make that tab active
+          state.activeTab = historyTab._id;
+        }
+      }
+
+      if (current(state).tabs.length === 0 || !hasHistoryId) {
+        console.log('Creating new Tab');
+
+        // Creating New Tab
         const newTab: Tab = {
           _id: existingTabId,
-          name: historyItem.apiUrl,
+          name: String(selectedHistoryItem.url),
           sidebar: "history",
-          method: historyItem.method,
-          historyData: historyItem
+          method: selectedHistoryItem.method,
+          historyData: selectedHistoryItem
         };
+
         state.tabs.push(newTab);
         state.activeTab = existingTabId;
       }
+      return;
     },
 
     setActiveTab: (state, action: PayloadAction<string>) => {

@@ -93,7 +93,7 @@ export default function HistoryComponent() {
 
     return history.filter(
       (item) =>
-        item.apiUrl.toLowerCase().includes(search.toLowerCase()) ||
+        item.url.toLowerCase().includes(search.toLowerCase()) ||
         item.method.toLowerCase().includes(search.toLowerCase())
     );
   }, [history, search]);

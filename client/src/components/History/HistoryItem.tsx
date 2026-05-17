@@ -37,6 +37,7 @@ export default function HistoryItem({
   onDelete: (id: string) => void;
 }) {
   const dispatch = useDispatch<AppDispatch>()
+  console.log('item',item);
 
   return (
     <div className="group rounded-xl border border-gray-200 dark:border-gray-800 p-2 transition hover:shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer"
@@ -68,7 +69,7 @@ export default function HistoryItem({
               )}
               {item.statusCode}
             </span>
-{/* 
+            {/* 
             <span className="text-sm opacity-60">
               {item.responseTime}ms
             </span> */}
@@ -76,9 +77,9 @@ export default function HistoryItem({
 
           <div className="flex items-center gap-2 min-w-0">
             <LinkIcon className="w-4 h-4 opacity-50 shrink-0" />
-            <Tooltip content={item.apiUrl}>
+            <Tooltip content={item.url}>
               <p className="truncate text-sm font-medium">
-                {item.apiUrl}
+                {item.url}
               </p>
             </Tooltip>
           </div>
@@ -88,8 +89,8 @@ export default function HistoryItem({
           {formatTime(item.testedAt)}
           <TrashIcon className="w-4 h-4 cursor-pointer hover:text-red-500 transition-colors z-10"
             onClick={(e) => {
-                e.stopPropagation();
-                onDelete(item._id);
+              e.stopPropagation();
+              onDelete(item._id);
             }}
           />
         </div>
