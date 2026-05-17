@@ -11,7 +11,7 @@ const requestHistorySchema = new mongoose.Schema(
     requestId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Request",
-      required: true,
+      // required: true,
       index: true,
     },
 
@@ -44,9 +44,9 @@ const requestHistorySchema = new mongoose.Schema(
 
   },
   {
-    timestamps: false, // testedAt already serves this purpose
+    timestamps: { createdAt: true, updatedAt: true },
     versionKey: false,
-  },
+  }
 );
 
 // Compound index — most common query pattern: fetch a user's history, newest first

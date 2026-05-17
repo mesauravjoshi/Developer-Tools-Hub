@@ -32,7 +32,7 @@ const requestSchema = new mongoose.Schema(
     collectionId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Collection",
-      required: true,
+      // required: true,
       index: true,
     },
 

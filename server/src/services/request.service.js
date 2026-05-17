@@ -2,6 +2,9 @@ import axios from "axios";
 import RequestHistory from "#models/history.js";
 
 export const executeApiRequest = async ({ userId, url, method, headers, data }) => {
+  console.log('req testing...',userId, url, method, headers, data);
+  console.log('header testing...',userId, url, method, headers, data);
+  
   const startTime = Date.now();
 
   try {
